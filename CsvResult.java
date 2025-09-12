@@ -7,7 +7,5 @@ public class CsvResult {
         this.stuData = stuData;
     }
 
-    public String[][] getStuData(){
-        return stuData;
-    }
+
 }

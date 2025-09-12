@@ -1,20 +1,22 @@
 import java.io.*;
 
 public class FileHandling {
+    String[] headers = null;
+    String File;
     //checking the length of the CSV file with headers
     // populate the arrays with data in CSV
-    public CsvResult addDataToArr(String file){
-
+    public CsvResult readingCsvFile(String file){
         int rows = 0;
         String line;
-        String[] headers = null;
 
-
+        //storing the CSV file .reason - if user starts with a file there is no need to get it  again and again
+        File = file;
         // Count total rows
         try (BufferedReader rowReader = new BufferedReader(new FileReader(file))) {
             while (rowReader.readLine() != null) rows++;
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getStackTrace();
+            System.out.println("error - CSV File not found - " + e);
         }
 
         
@@ -29,7 +31,7 @@ public class FileHandling {
                 if (counter == 0) {
                     headers = new String[values.length]; //get the value of headers array
 
-                    for (int i = 0; i < values.length; i++) {
+                    for(int i = 0; i < values.length; i++) {
                         headers[i] = values[i];
                     }
                 } else {
@@ -43,7 +45,8 @@ public class FileHandling {
             }
             
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getStackTrace();
+            System.out.println("Error - reading the CSV file format - " + e);
         }
 
     return new CsvResult(headers, stuData);
@@ -51,28 +54,25 @@ public class FileHandling {
 
 
     //writing new student data to the CSV file
-    public void writingToCSVFile(String file , String[] header,String[][] prevStuData, String[] studentDataArr ){
-        // System.out.println("fucntion works properly");
-            // for(String items : header){
-            //     pw.write(items);
-            // }
-            writingFunction(header , file);
+    public void writingToCSVFile(String[][] prevStuData, String[] studentDataArr ){
+
+            writingFunction();
             
             for(String[] row : prevStuData){
                 for(int i = 0; i < row.length; i++){
-                    writingFunction(row[i], i, file);
+                    writingFunction(row[i], i);
                 }
             }
             for(int i = 0; i< studentDataArr.length; i++){
-                writingFunction(studentDataArr[i], i, file);
+                writingFunction(studentDataArr[i], i);
             }
 
         System.out.println("Writing to CSV Completed.");
     }
 
 
-    private void writingFunction(String item , int count , String file){
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(file , true))){
+    private void writingFunction(String item , int count ){
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(File , true))){
             int CSVLineLength = 7; 
             if(count < CSVLineLength){
                 //much efficient
@@ -93,22 +93,24 @@ public class FileHandling {
             }
         }catch(FileNotFoundException e){
             e.getStackTrace();
+            System.out.println("Error - File Not Found - Writing section (body) -" + e);
         }
     }
 
-    //overloaded fucntion - headers array
-    private void writingFunction(String[] headerArr, String file){
-        try(PrintWriter pw = new PrintWriter(file)){
-            for(int i = 0; i < headerArr.length; i++){
+    //overloaded function - headers array
+    private void writingFunction(){
+        try(PrintWriter pw = new PrintWriter(File)){
+            for(int i = 0; i < headers.length; i++){
                 if(i == 7){
-                    pw.println(headerArr[i]);
+                    pw.println(headers[i]);
                 }
                 else{
-                    pw.print(headerArr[i] + ",");
+                    pw.print(headers[i] + ",");
                 }
             }
         }catch(FileNotFoundException e){
             e.getStackTrace();
+            System.out.println("error - file not found - writing section (headers) -" + e);
         }
     }
 }

@@ -32,7 +32,7 @@ public class Student {
 
 
     }
-    //gertter method for the studentdata array
+    //getter method for the studentData array
     public String[] getStudentData(){
         return studentData;
     }
