@@ -67,9 +67,12 @@ public class FileHandling {
                     writingFunction(row[i], i);
                 }
             }
-            for(int i = 0; i< studentDataArr.length; i++){
+            if(studentDataArr != null){ //null value is used in the student edit section - as it doesn't add a student
+                for(int i = 0; i< studentDataArr.length; i++){
                 writingFunction(studentDataArr[i], i);
             }
+            }
+
 
         System.out.println("Writing to CSV Completed.");
     }
@@ -98,7 +101,10 @@ public class FileHandling {
         }catch(FileNotFoundException e){
             e.getStackTrace();
             System.out.println("Error - File Not Found - Writing section (body) -" + e);
-        }
+        }catch(NumberFormatException e){
+            e.getStackTrace();
+            System.out.println("Error - number format error in headers");
+        } 
     }
 
     //overloaded function - headers array

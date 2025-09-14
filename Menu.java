@@ -11,7 +11,7 @@ public class Menu {
         
 
          //view all records - 3
-        String[] headers = result.headers;
+        // String[] headers = result.headers;
         String[][] stuData = result.stuData;
 
         Scanner sc = new Scanner(System.in);
@@ -50,7 +50,6 @@ public class Menu {
 
                         
                         if(newStuID != null && newStuFirstName != null && newStuLastName != null && newCourseEnrolled != null){
-
                             // previous version
                             // String[] studentIDFormat = newStuID.split("");
                             //     if(studentIDFormat[0].equals("S")){
@@ -65,7 +64,7 @@ public class Menu {
                             //             }
                             //         }                    
                             // }
-                                if(newStuID.matches("S\\d{7}")){
+                                if(newStuID.matches("S\\d{7}")){ //using regex to identify it input items are digits or a specific value
                                     isStuIDinFormat = true;
                                 }
                                 else{
@@ -79,7 +78,7 @@ public class Menu {
                             if(isStuIDinFormat && (newYearLevel > 0 && newYearLevel < 5)){
                                 if(newStuCWA >= 0 && newStuCWA <= 100){
                                     if(newStudyStatus.equals("FT") || newStudyStatus.equals("PT")){
-                                        if(newCredEarn > 0 ){
+                                        if(newCredEarn >= 0 && newCredEarn <= 400 ){
                                             
                                             Student newStudentRecord = new Student(newStuID, newStuFirstName, newStuLastName, newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);
                                             String[] data = newStudentRecord.getStudentData();
@@ -111,22 +110,39 @@ public class Menu {
                     
 
                 case 2:
+                        Boolean isEditing = true;
                         sc.nextLine();
                         System.out.println("================== Edit student Info ==================");
                         System.out.print("Enter student ID:- ");
                         String userStudentIDEntered = sc.nextLine();
-                        Boolean isEditing = true;
+
+                    do{
+                        
+                        Boolean isStundetFound = false;
+                        int studentRowNum = 0;
+                        
 
                         for(int i = 0; i < stuData.length; i++){
                             if(stuData[i][0].equals(userStudentIDEntered)){
+                                isStundetFound = true;
+                                studentRowNum = i;
+                            }
+                        }
+                        if(!isStundetFound){
+                            System.out.println("error - Enter a valid student ID");
+                        }
+
+
+                        if(isStundetFound){
                                 System.out.println("Select an item to edit");
                                 System.out.println("===========================");
-                                System.out.println("0) EXIT\n 1) Student first name\n 2) Student last name\n 3) course Enrolled\n 4) Year level\n 5) CWA marks\n 6) Student Status\n 7) Total credits Earned");
+                                System.out.println(" 0) EXIT\n 1) Student first name\n 2) Student last name\n 3) course Enrolled\n 4) Year level\n 5) CWA marks\n 6) Student Status\n 7) Total credits Earned");
                                 int studentEditInput = sc.nextInt();
+                                sc.nextLine();
 
                                 switch (studentEditInput) {
                                     case 0:
-                                            isExit = false;
+                                            isEditing = false;
                                             System.out.println("Exiting from editing section");
                                         break;
                                     
@@ -134,68 +150,65 @@ public class Menu {
                                             System.out.print("Enter new first-name:- ");
                                             String editStuFName = sc.nextLine();
 
-                                            stuData[i][1] = editStuFName;
-                                            System.out.println("updated value:- " + stuData[i][1]);
+                                            stuData[studentRowNum][1] = editStuFName;
+                                            System.out.println("updated value:- " + stuData[studentRowNum][1]);
                                         break;
                                     
                                     case 2:
                                             System.out.print("Enter new last-name:- ");
                                             String editStuLName = sc.nextLine();
 
-                                            stuData[i][2] = editStuLName;
-                                            System.out.println("updated value:- " + stuData[i][2]);
+                                            stuData[studentRowNum][2] = editStuLName;
+                                            System.out.println("updated value:- " + stuData[studentRowNum][2]);
                                         break;
                                     
                                     case 3:
                                             System.out.print("Enter the new course:-");
                                             String editCourse = sc.nextLine();
 
-                                            stuData[i][3] = editCourse;
-                                            System.out.println("updated course:- " + stuData[i][3]);
+                                            stuData[studentRowNum][3] = editCourse;
+                                            System.out.println("updated course:- " + stuData[studentRowNum][3]);
                                         break;
                                     
                                     case 4:
                                             System.out.print("Enter the year-level:- ");
                                             int editYearLevel = sc.nextInt();
 
-                                            stuData[i][4] = String.valueOf(editYearLevel);
-                                            System.out.println("updated Year:- " + stuData[i][4]);
+                                            stuData[studentRowNum][4] = String.valueOf(editYearLevel);
+                                            System.out.println("updated Year:- " + stuData[studentRowNum][4]);
                                         break;
                                     
                                     case 5:
                                             System.out.print("Enter CWA marks:- ");
                                             Double editCWA = sc.nextDouble();
 
-                                            stuData[i][5] = String.valueOf(editCWA);
-                                            System.out.println("updated CWA marks:- " + stuData[i][5]);
+                                            stuData[studentRowNum][5] = String.valueOf(editCWA);
+                                            System.out.println("updated CWA marks:- " + stuData[studentRowNum][5]);
                                         break;
                                     
                                     case 6:
                                             System.out.print("Enter Study Status:- ");
                                             String editStatus = sc.nextLine();
 
-                                            stuData[i][6] = editStatus;
-                                            System.out.println("updated Status of study:- " + stuData[i][6]);
+                                            stuData[studentRowNum][6] = editStatus;
+                                            System.out.println("updated Status of study:- " + stuData[studentRowNum][6]);
                                         break;
                                     
                                     case 7:
                                             System.out.print("Enter Credits Earned:- ");
                                             String editCredits = sc.nextLine();
 
-                                            stuData[i][7] = editCredits;
-                                            System.out.println("updated Creadits Earned:- " + stuData[i][7]);
+                                            stuData[studentRowNum][7] = editCredits;
+                                            System.out.println("updated Creadits Earned:- " + stuData[studentRowNum][7]);
                                         break;
                                 }       
-
-                            }
-                            else{
-                                System.out.println("error - user Input is wrong - invalid student ID ");
-                            }
+                        
+                                fileHandler.writingToCSVFile(stuData, null);
+                                System.out.println("student data updated successfully");
                         }
 
-                        isExit = false;
 
-
+                    }while(isEditing);
 
                     break;
 
