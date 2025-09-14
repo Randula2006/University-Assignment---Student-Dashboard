@@ -3,16 +3,20 @@ import java.io.*;
 public class FileHandling {
     String[] headers = null;
     String File;
+
+     //storing the CSV file .reason - if user starts with a file there is no need to get it  again and again
+    public FileHandling(String file){
+        this.File = file;
+    }
     //checking the length of the CSV file with headers
     // populate the arrays with data in CSV
-    public CsvResult readingCsvFile(String file){
+    public CsvResult readingCsvFile(){
         int rows = 0;
         String line;
 
-        //storing the CSV file .reason - if user starts with a file there is no need to get it  again and again
-        File = file;
+
         // Count total rows
-        try (BufferedReader rowReader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader rowReader = new BufferedReader(new FileReader(File))) {
             while (rowReader.readLine() != null) rows++;
         } catch (Exception e) {
             e.getStackTrace();
@@ -23,7 +27,7 @@ public class FileHandling {
         String[][] stuData = new String[rows - 1][]; // first row = header
         int counter = 0;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(File))) {
 
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(",");
