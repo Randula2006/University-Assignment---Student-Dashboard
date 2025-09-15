@@ -21,7 +21,7 @@ public class Menu {
         System.out.println("1> Add new student\n2> Edit student data\n3> View All student Info\n4> Filter by Course\n5> Filter by Status\n6> Hightest CWA\n7> Avarage CWA for each Course\n8> Credit analysis\n9> Exit Program");
         int userSelectedItem = sc.nextInt();
         boolean isExit = false;
-        boolean isStuIDinFormat = false;//return true is studentID is in format
+        boolean isStuIDinFormat = false;//return true if studentID is in format
 
 
         switch (userSelectedItem) {
@@ -38,7 +38,7 @@ public class Menu {
                         String newCourseEnrolled = sc.nextLine();
                         System.out.print("Enter Student's study year:-");
                         int newYearLevel = sc.nextInt();
-                        sc.nextLine();
+                        sc.nextLine(); //to stop consuming this input
                         System.out.print("Enter student's CWA:-");
                         double newStuCWA = sc.nextDouble();
                         sc.nextLine(); //to stop consuming this input
@@ -46,56 +46,52 @@ public class Menu {
                         String newStudyStatus = sc.nextLine().toUpperCase();    
                         System.out.print("Enter Credits earned by student:-");
                         int newCredEarn = sc.nextInt();
-                        sc.nextLine();
+                        sc.nextLine(); //to stop consuming this input
 
-                        
-                        if(newStuID != null && newStuFirstName != null && newStuLastName != null && newCourseEnrolled != null){
-                            // previous version
-                            // String[] studentIDFormat = newStuID.split("");
-                            //     if(studentIDFormat[0].equals("S")){
-                            //         for(int i = 1; i < studentIDFormat.length; i++){
-                            //             if(Character.isDigit(studentIDFormat[i].charAt(0))){
-                            //                 isStuIDinFormat = true;
-                            //             }
-                            //             else{
-                            //             System.out.println("Student ID is not in format - 8 characters required.");
-                            //             isExit = true;
-                            //             break;
-                            //             }
-                            //         }                    
-                            // }
-                                if(newStuID.matches("S\\d{7}")){ //using regex to identify it input items are digits or a specific value
-                                    isStuIDinFormat = true;
-                                }
-                                else{
-                                    System.out.println("Student ID is not in format");
-                                    isExit = true;
-                                    break;
-                                }
-                                
-                          
-
-                            if(isStuIDinFormat && (newYearLevel > 0 && newYearLevel < 5)){
-                                if(newStuCWA >= 0 && newStuCWA <= 100){
-                                    if(newStudyStatus.equals("FT") || newStudyStatus.equals("PT")){
-                                        if(newCredEarn >= 0 && newCredEarn <= 400 ){
-                                            
-                                            Student newStudentRecord = new Student(newStuID, newStuFirstName, newStuLastName, newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);
-                                            String[] data = newStudentRecord.getStudentData();
-                                            
-                                            fileHandler.writingToCSVFile(stuData , data);
-                                            System.out.println("Student data has been validated");
-
-                                        }else{}
-
-                                    }else{System.out.println("Styudy Status should be (Either FT or PT) values");}
-
-                                }else{ System.out.println("CWA creadits earned by a student must be within range");}
-
-                            }else{System.out.println("student year should be between 1 to 4");}
-
-                        }else{System.out.println("student ID , FIRST name , LAST name OR Course enrolled are required");}
-
+                        // previous version
+                        // if(newStuID != null && newStuFirstName != null && newStuLastName != null && newCourseEnrolled != null){
+                        //     // previous version
+                        //     // String[] studentIDFormat = newStuID.split("");
+                        //     //     if(studentIDFormat[0].equals("S")){
+                        //     //         for(int i = 1; i < studentIDFormat.length; i++){
+                        //     //             if(Character.isDigit(studentIDFormat[i].charAt(0))){
+                        //     //                 isStuIDinFormat = true;
+                        //     //             }
+                        //     //             else{
+                        //     //             System.out.println("Student ID is not in format - 8 characters required.");
+                        //     //             isExit = true;
+                        //     //             break;
+                        //     //             }
+                        //     //         }                    
+                        //     // }
+                        //         if(newStuID.matches("S\\d{7}")){ //using regex to identify it input items are digits or a specific value
+                        //             isStuIDinFormat = true;
+                        //         }
+                        //         else{
+                        //             System.out.println("Student ID is not in format");
+                        //             isExit = true;
+                        //             break;
+                        //         }
+                        //     if(isStuIDinFormat && (newYearLevel > 0 && newYearLevel < 5)){
+                        //         if(newStuCWA >= 0 && newStuCWA <= 100){
+                        //             if(newStudyStatus.equals("FT") || newStudyStatus.equals("PT")){
+                        //                 if(newCredEarn >= 0 && newCredEarn <= 400 ){                                          
+                        //                     Student newStudentRecord = new Student(newStuID, newStuFirstName, newStuLastName, newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);
+                        //                     String[] data = newStudentRecord.getStudentData();                    
+                        //                     fileHandler.writingToCSVFile(stuData , data);
+                        //                     System.out.println("Student data has been validated");
+                        //                 }else{}
+                        //             }else{System.out.println("Styudy Status should be (Either FT or PT) values");}
+                        //         }else{ System.out.println("CWA creadits earned by a student must be within range");}
+                        //     }else{System.out.println("student year should be between 1 to 4");}
+                        // }else{System.out.println("student ID , FIRST name , LAST name OR Course enrolled are required");}
+                        Boolean isValidated = Validation.EntryValidation(newStuID, newStuFirstName, newStuLastName, newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);
+                        if(isValidated){
+                            Student newStudentRecord = new Student(newStuID, newStuFirstName, newStuLastName, newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);
+                            String[] data = newStudentRecord.getStudentData();                    
+                            fileHandler.writingToCSVFile(stuData , data);
+                            System.out.println("Student data has been validated");                            
+                        }
 
                         isExit = true;
                         break;
@@ -213,18 +209,53 @@ public class Menu {
                     break;
 
                 case 3:
-
+                        for (int i = 0; i < stuData.length; i++){
+                            System.out.println("Student Name:- " + stuData[i][1] + " " + stuData[i][2] + " : Student ID:- " + stuData[i][0]);
+                        }
                     break;
 
                 case 4:
 
+                        sc.nextLine();
+                        System.out.println("=============================");
+                        System.out.println("Enter course to filter");
+                        String userCourseEntered = sc.nextLine();
+
+                        for(int i = 0; i < stuData.length; i++){
+                            // System.out.println(stuData[i][3] + " " + stuData[i][0]);
+                            if(userCourseEntered.equalsIgnoreCase(stuData[i][3].trim())){
+                                System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: StudentID: " + stuData[i][0]);
+                            }
+                        }
+
                     break;
+                        
+                    
 
                 case 5:
 
                     break;
 
                 case 6:
+
+                        System.out.println("=============================");
+                        int userInput = sc.nextInt();
+
+                        try{
+                            int rowNum = 0;
+                            Double max = Double.parseDouble(stuData[0][5]);
+                            for(int i = 0; i < stuData.length; i++){
+                                if(Double.parseDouble(stuData[i][5]) > max){
+                                    max = Double.parseDouble(stuData[i][5]);
+                                     rowNum = i;
+                                 }
+                            }
+
+                            System.out.println("Student Name: " + stuData[rowNum][1] + " " + stuData[rowNum][2] + ": Highest CWA marks: " + max);
+                        }catch(NumberFormatException e){
+                            System.out.println("Error - number format error");
+                        }
+
 
                     break;
 

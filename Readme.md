@@ -19,7 +19,7 @@ The app provides the functions it can handle in a command line interface.
 
 Each student information is extracted from the CSV file and all the new information gethered will be written into the CSV document again. 
 
-### Validation checks
+## Validation checks
 
 when student data added to a new records the it checks sevaral validation to store the most quality data onto the records.
 
@@ -33,5 +33,12 @@ when student data added to a new records the it checks sevaral validation to sto
 8. Study status should be either **FT or PT** being *Full Time* and *Part Time*. It doesn't matter whether it is in *uppercase* or *lowercase*
 9. Credits earned by a student cannot be a **negative value** as well as **cannot be greater than 400**.
 
+---
+
+## Errors and Error handles
+
+This section will cover all the errors the program will handle and what every error code means.
+
+- 
 
 
