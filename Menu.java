@@ -220,12 +220,18 @@ public class Menu {
                         System.out.println("=============================");
                         System.out.println("Enter course to filter");
                         String userCourseEntered = sc.nextLine();
+                        Boolean isFound = false;
 
                         for(int i = 0; i < stuData.length; i++){
                             // System.out.println(stuData[i][3] + " " + stuData[i][0]);
                             if(userCourseEntered.equalsIgnoreCase(stuData[i][3].trim())){
                                 System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: StudentID: " + stuData[i][0]);
+                                isFound = true;
                             }
+                        }
+
+                        if(!isFound){
+                            System.out.println("No Students are with " + userCourseEntered + " course");
                         }
 
                     break;
@@ -233,13 +239,32 @@ public class Menu {
                     
 
                 case 5:
+                        
+                        System.out.println("Select Study Status");
+                        System.out.println("1) Full Time\n2) Part Time");
+                        int studyStatusEntered = sc.nextInt();
+                        
+                        if(studyStatusEntered == 1 ){
+                            for(int i = 0; i < stuData.length; i++){
+                                if(stuData[i][6].trim().equalsIgnoreCase("FT")){
+                                   System.out.println("Student ID: " + stuData[i][0] + " :: Student Name: " + stuData[i][1] + " " + stuData[i][2] );
+                                }
+                            }
+                        }else if (studyStatusEntered == 2){
+                            for(int i = 0; i < stuData.length; i++){
+                                if(stuData[i][6].trim().equalsIgnoreCase("PT")){
+                                   System.out.println("Student ID: " + stuData[i][0] + " :: Student Name: " + stuData[i][1] + " " + stuData[i][2] );
+                                }
+                            }                            
+                        }else{
+                            System.out.println("Enter a valid input");
+                        }
 
                     break;
 
                 case 6:
 
                         System.out.println("=============================");
-                        int userInput = sc.nextInt();
 
                         try{
                             int rowNum = 0;
