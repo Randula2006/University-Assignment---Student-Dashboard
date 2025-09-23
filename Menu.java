@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -5,6 +6,7 @@ public class Menu {
     
     public Boolean menu(){
 
+        
         String fileName = "data.csv";
         FileHandling fileHandler = new FileHandling(fileName);
         CsvResult result =  fileHandler.readingCsvFile();
@@ -285,7 +287,72 @@ public class Menu {
                     break;
 
                 case 7:
+                        System.out.println("Avarage CWA for Each course");
+                        String[] courses = new String[stuData.length];
+                        
+                        //get all the courses stundets do
+                        for(int i = 0; i < stuData.length; i++){
+                            courses[i] = stuData[i][3].trim();  
+                        }
+                        //previous version
+                        // for (int i = 0; i < stuData.length; i++) {
+                        //     int occuredTimes = 0;
+                        //     for (int j = 0; j < courses.length; j++) {
+                        //         if (courses[i].equals(stuData[i][3].trim())) {
+                        //             if (occuredTimes <= 1) {
+                        //                 occuredTimes++;
+                        //             }
+                        //         }
+                        //     }
+                        // }  
 
+                        // Keep only the first occurrence of each item
+                        int uniqueCount = 0; 
+                        for (int i = 0; i < courses.length; i++) {
+                            boolean isDuplicate = false;
+                            // Checking if this item is already kept
+                            for (int j = 0; j < uniqueCount; j++) {
+                                if (courses[i].equals(courses[j])) {
+                                    isDuplicate = true;
+                                }
+                            }
+                            // If not a duplicate, keep it
+                            if (!isDuplicate) {
+                                courses[uniqueCount] = courses[i];
+                                uniqueCount++;
+                            }
+                        }
+                        String[] Final_courses = new String[uniqueCount];
+                        // Print only unique elements
+                        for (int i = 0; i < uniqueCount; i++) {
+                            Final_courses[i] = courses[i];
+                        }
+
+                        for(int i = 0; i < Final_courses.length; i++){
+                            Double sum = .0;
+                            int count2 = 0;
+                            for(int j = 0; j < stuData.length; j++){
+                                if(stuData[j][3].trim().equals(Final_courses[i])){
+                                    sum = sum + Double.parseDouble(stuData[j][5]);
+                                    count2++;
+                                }
+                            }
+                            System.out.println(Final_courses[i] + " Course Avarage CWA: " + sum/count2);   
+                        }
+
+                        System.out.println(Arrays.toString(Final_courses));
+                        // previous unfinished versions
+                        // Double sum = .0;
+                        // int count2 = 0;
+                        // for(int i = 0; i < stuData.length; i++){
+                        //     for(int j = 0; j < courses.length; j++){
+                        //         if(stuData[i][3].trim().equals(courses[j])){
+                        //             sum = sum + Double.parseDouble(stuData[i][5]);
+                        //             count2++;
+                        //         }
+                        //     }
+                        //     System.out.println(stuData[i][3] + " Course Avarage CWA: " + sum/count2);
+                        // }
                     break;
 
                 case 8:
@@ -293,15 +360,13 @@ public class Menu {
                     break;
 
                 case 9:
-
+                        isExit = true;
                     break;
 
-            
-                default:
-                    break;
             }
 
 
             return isExit;
     }
 }
+
