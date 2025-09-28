@@ -8,7 +8,8 @@ public class Student {
 
     Student(String studentID , String studentFName , String studentLName , Details details){
         setStudentID(studentID);
-        setStudentName(studentFName , studentLName);
+        setStudentName(studentFName);
+        setStudentLName(studentLName);
         this.details = details;
    
         studentData[3] = details.getCourse();
@@ -34,12 +35,20 @@ public class Student {
         }else{throw new IllegalArgumentException("Student ID cannot be a null value");}//display a custom error message
     }
 
-    public void setStudentName(String fName , String lName){
-        if(fName != null && lName != null){
+    public void setStudentName(String fName){
+        if(fName != null){
             this.studentFName = fName;
-            this.studentLName = lName;
+            
             studentData[1] = this.studentFName;
-            studentData[2] = this.studentLName;
+            
         }else{throw new IllegalArgumentException("First name or last name cannot be null");}
     }
+
+    public void setStudentLName(String lName){
+        if(lName != null){
+            this.studentLName = lName;
+            studentData[2] = this.studentLName;
+        }else{throw new IllegalArgumentException("Last name cannot be null");}
+    }
+
 }

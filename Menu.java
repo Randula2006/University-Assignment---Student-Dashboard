@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -15,181 +14,202 @@ public class Menu {
          //view all records - 3
         // String[] headers = result.headers;
         String[][] stuData = result.stuData;
-
+        
         Scanner sc = new Scanner(System.in);
 
         System.out.println("========================================== \n Welcome to student admistration software \n==========================================");
         System.out.println("Your options for this system are listed below");
         System.out.println("1> Add new student\n2> Edit student data\n3> View All student Info\n4> Filter by Course\n5> Filter by Status\n6> Hightest CWA\n7> Avarage CWA for each Course\n8> Credit analysis\n9> Exit Program");
         int userSelectedItem = sc.nextInt();
-        boolean isExit = false;
-        boolean isStuIDinFormat = false;//return true if studentID is in format
-
+        Boolean doesExits = false;
+        
 
         switch (userSelectedItem) {
                 case 1:
-                    try{
-                        System.out.print("Enter student ID:-");
-                        sc.nextLine();  //to stop consuming this input
-                        String newStuID = sc.nextLine();
-                        System.out.print("Enter student First Name:-");
-                        String newStuFirstName = sc.nextLine();
-                        System.out.print("Enter student Last Name:-");
-                        String newStuLastName = sc.nextLine();
-                        System.out.print("Enter Course Enrolled:-");
-                        String newCourseEnrolled = sc.nextLine();
-                        System.out.print("Enter Student's study year:-");
-                        int newYearLevel = sc.nextInt();
-                        sc.nextLine(); //to stop consuming this input
-                        System.out.print("Enter student's CWA:-");
-                        double newStuCWA = sc.nextDouble();
-                        sc.nextLine(); //to stop consuming this input
-                        System.out.print("Enter study Status:-");
-                        String newStudyStatus = sc.nextLine().toUpperCase();    
-                        System.out.print("Enter Credits earned by student:-");
-                        int newCredEarn = sc.nextInt();
-                        sc.nextLine(); //to stop consuming this input
-
-                        // previous version
-                        Details details = new Details(newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);                                        
-                        Student newStudentRecord = new Student(newStuID, newStuFirstName, newStuLastName, details);
-                        String[] data = newStudentRecord.getStudentData();                    
-                        fileHandler.writingToCSVFile(stuData , data);
-                        System.out.println("Student data has been validated");
-
-                            // Details details = new Details(
-                            //     newCourseEnrolled,
-                            //     newYearLevel,
-                            //     newStuCWA,
-                            //     newStudyStatus,
-                            //     newCredEarn
-                            // );
-                            // Student newStudentRecord = new Student(
-                            //     newStuID,
-                            //     newStuFirstName,
-                            //     newStuLastName,
-                            //     details
-                            // );
-                            // String[] data = newStudentRecord.getStudentData();                    
-                            // fileHandler.writingToCSVFile(stuData , data);
-                            // System.out.println("Student data has been validated");                            
-                        break;
-
-                    }catch(InputMismatchException e){
-                        e.getStackTrace();
-                        System.out.println("Input mismatch:- Enter the Correct Input type" );
-                        isExit = true;
-                        break;
-                    }catch(IllegalArgumentException e){
-                        e.getStackTrace();
-                        System.out.println("Error - " + e.getMessage());
-                        isExit = true;
-                        break;
-                    }
-
-                    
-
-                case 2:
-                        Boolean isEditing = true;
-                        sc.nextLine();
-                        System.out.println("================== Edit student Info ==================");
-                        System.out.print("Enter student ID:- ");
-                        String userStudentIDEntered = sc.nextLine();
-
+                        boolean isExit = false;
+                        System.out.println("=============== Add new student ===============");
                     do{
-                        
-                        Boolean isStundetFound = false;
-                        int studentRowNum = 0;
-                        
+                        try{
+                            System.out.print("Enter student ID:-");
+                            sc.nextLine();  //to stop consuming this input
+                            String newStuID = sc.nextLine();
+                            System.out.print("Enter student First Name:-");
+                            String newStuFirstName = sc.nextLine();
+                            System.out.print("Enter student Last Name:-");
+                            String newStuLastName = sc.nextLine();
+                            System.out.print("Enter Course Enrolled:-");
+                            String newCourseEnrolled = sc.nextLine();
+                            System.out.print("Enter Student's study year:-");
+                            int newYearLevel = sc.nextInt();
+                            sc.nextLine(); //to stop consuming this input
+                            System.out.print("Enter student's CWA:-");
+                            double newStuCWA = sc.nextDouble();
+                            sc.nextLine(); //to stop consuming this input
+                            System.out.print("Enter study Status:-");
+                            String newStudyStatus = sc.nextLine().toUpperCase();    
+                            System.out.print("Enter Credits earned by student:-");
+                            int newCredEarn = sc.nextInt();
+                            sc.nextLine(); //to stop consuming this input
 
-                        for(int i = 0; i < stuData.length; i++){
-                            if(stuData[i][0].equals(userStudentIDEntered)){
-                                isStundetFound = true;
-                                studentRowNum = i;
-                            }
-                        }
-                        if(!isStundetFound){
-                            System.out.println("error - Enter a valid student ID");
-                        }
+                            Details details = new Details(
+                                newCourseEnrolled,
+                                newYearLevel,
+                                newStuCWA,
+                                newStudyStatus,
+                                newCredEarn
+                            );                 
 
+                            Student newStudentRecord = new Student(
+                                newStuID,
+                                newStuFirstName,
+                                newStuLastName,
+                                details
+                            );
 
-                        if(isStundetFound){
-                                System.out.println("Select an item to edit");
-                                System.out.println("===========================");
-                                System.out.println(" 0) EXIT\n 1) Student first name\n 2) Student last name\n 3) course Enrolled\n 4) Year level\n 5) CWA marks\n 6) Student Status\n 7) Total credits Earned");
-                                int studentEditInput = sc.nextInt();
-                                sc.nextLine();
+                            String[] data = newStudentRecord.getStudentData();
+                            // writing all student data to the csv file            
+                            fileHandler.writingToCSVFile(stuData , data);
+                            System.out.println("Student data has been validated");
+                            isExit = true; // exit the loop after successful addition
+                            // Details details = new Details(
+                                //     newCourseEnrolled,
+                                //     newYearLevel,
+                                //     newStuCWA,
+                                //     newStudyStatus,
+                                //     newCredEarn
+                                // );
+                                // Student newStudentRecord = new Student(
+                                //     newStuID,
+                                //     newStuFirstName,
+                                //     newStuLastName,
+                                //     details
+                                // );
+                                // String[] data = newStudentRecord.getStudentData();                    
+                                // fileHandler.writingToCSVFile(stuData , data);
+                                // System.out.println("Student data has been validated");                            
 
-                                switch (studentEditInput) {
-                                    case 0:
-                                            isEditing = false;
-                                            System.out.println("Exiting from editing section");
-                                        break;
-                                    
-                                    case 1:
-                                            System.out.print("Enter new first-name:- ");
-                                            String editStuFName = sc.nextLine();
+                        }catch(InputMismatchException e){
+                            e.getStackTrace();
+                            System.out.println("Input mismatch:- Enter the Correct Input type" );
+                            System.out.println("Try again");
+                            isExit = false;
 
-                                            stuData[studentRowNum][1] = editStuFName;
-                                            System.out.println("updated value:- " + stuData[studentRowNum][1]);
-                                        break;
-                                    
-                                    case 2:
-                                            System.out.print("Enter new last-name:- ");
-                                            String editStuLName = sc.nextLine();
-
-                                            stuData[studentRowNum][2] = editStuLName;
-                                            System.out.println("updated value:- " + stuData[studentRowNum][2]);
-                                        break;
-                                    
-                                    case 3:
-                                            System.out.print("Enter the new course:-");
-                                            String editCourse = sc.nextLine();
-
-                                            stuData[studentRowNum][3] = editCourse;
-                                            System.out.println("updated course:- " + stuData[studentRowNum][3]);
-                                        break;
-                                    
-                                    case 4:
-                                            System.out.print("Enter the year-level:- ");
-                                            int editYearLevel = sc.nextInt();
-
-                                            stuData[studentRowNum][4] = String.valueOf(editYearLevel);
-                                            System.out.println("updated Year:- " + stuData[studentRowNum][4]);
-                                        break;
-                                    
-                                    case 5:
-                                            System.out.print("Enter CWA marks:- ");
-                                            Double editCWA = sc.nextDouble();
-
-                                            stuData[studentRowNum][5] = String.valueOf(editCWA);
-                                            System.out.println("updated CWA marks:- " + stuData[studentRowNum][5]);
-                                        break;
-                                    
-                                    case 6:
-                                            System.out.print("Enter Study Status:- ");
-                                            String editStatus = sc.nextLine();
-
-                                            stuData[studentRowNum][6] = editStatus;
-                                            System.out.println("updated Status of study:- " + stuData[studentRowNum][6]);
-                                        break;
-                                    
-                                    case 7:
-                                            System.out.print("Enter Credits Earned:- ");
-                                            String editCredits = sc.nextLine();
-
-                                            stuData[studentRowNum][7] = editCredits;
-                                            System.out.println("updated Creadits Earned:- " + stuData[studentRowNum][7]);
-                                        break;
-                                }       
-                        
-                                fileHandler.writingToCSVFile(stuData, null);
-                                System.out.println("student data updated successfully");
+                        }catch(IllegalArgumentException e){
+                            e.getStackTrace();
+                            System.out.println("Error - " + e.getMessage());
+                            isExit = false;
+                            System.out.println("Try again");  
                         }
 
+                    }while(!isExit);
 
-                    }while(isEditing);
+                    break;
 
+                case 2:   
+                            Boolean isEditing = true;
+                            sc.nextLine();// to stop consuming the input
+                            System.out.println("================== Edit student Info ==================");
+                            System.out.print("Enter student ID:- ");
+                            String userStudentIDEntered = sc.nextLine();
+                        
+                        do{
+                            try{
+                                Boolean isStudentFound = false;
+                                int studentRowNum = 0;
+                                //search for the student id in the data
+                                for(int i = 0; i < stuData.length; i++){
+                                    if(stuData[i][0].equals(userStudentIDEntered)){
+                                        isStudentFound = true;
+                                        studentRowNum = i;
+                                    }
+                                }
+                                if(!isStudentFound){
+                                    System.out.println("error - Enter a valid student ID");
+                                    isEditing = false;//as there is no student to edit
+                                }
+
+
+                                if(isStudentFound){
+                                        System.out.println("================== Select an item to edit ==================");
+                                        System.out.println(" 0) EXIT\n 1) Student first name\n 2) Student last name\n 3) course Enrolled\n 4) Year level\n 5) CWA marks\n 6) Student Status\n 7) Total credits Earned");
+                                        int studentEditInput = sc.nextInt();
+                                        sc.nextLine();
+
+                                        switch (studentEditInput) {
+                                            case 0:
+                                                    isEditing = false;
+                                                    System.out.println("Exiting from editing section");
+                                                break;
+                                            
+                                            case 1:
+                                                    System.out.println("Current first-name:- " + stuData[studentRowNum][1]);
+                                                    System.out.print("Enter new first-name:- ");
+                                                    String editStuFName = sc.nextLine();
+                                                    if(Validation.isValidName(editStuFName)){stuData[studentRowNum][1] = editStuFName;}
+                                                break;
+                                            
+                                            case 2:
+                                                    System.out.println("Current last-name:- " + stuData[studentRowNum][2]);
+                                                    System.out.print("Enter new last-name:- ");
+                                                    String editStuLName = sc.nextLine();
+                                                    if(Validation.isValidName(editStuLName)){stuData[studentRowNum][2] = editStuLName;}
+                                                break;
+                                            
+                                            case 3:
+                                                    System.out.println("Current course:- " + stuData[studentRowNum][3]);
+                                                    System.out.print("Enter the new course:-");
+                                                    String editCourse = sc.nextLine();
+                                                    if(Validation.isValidName(editCourse)){stuData[studentRowNum][3] = editCourse;}
+                                                break;
+                                            
+                                            case 4:
+                                                    System.out.println("Current year-level:- " + stuData[studentRowNum][4]);
+                                                    System.out.print("Enter the year-level:- ");
+                                                    int editYearLevel = sc.nextInt();
+                                                    if(Validation.isValidYearLevel(editYearLevel)){stuData[studentRowNum][4] = String.valueOf(editYearLevel);}
+                                                break;
+                                            
+                                            case 5:
+                                                    System.out.println("Current CWA marks:- " + stuData[studentRowNum][5]); 
+                                                    System.out.print("Enter CWA marks:- ");
+                                                    Double editCWA = sc.nextDouble();
+                                                    if(Validation.isValidCWA(editCWA)){stuData[studentRowNum][5] = String.valueOf(editCWA);}
+                                                break;
+                                            
+                                            case 6:
+                                                    System.out.println("Current study status:- " + stuData[studentRowNum][6]);
+                                                    System.out.print("Enter Study Status:- ");
+                                                    String editStatus = sc.nextLine();
+                                                    if(Validation.isValidStatus(editStatus)){ stuData[studentRowNum][6] = editStatus.toUpperCase();}
+                                                break;
+                                            
+                                            case 7:
+                                                    System.out.println("Current Credits Earned:- " + stuData[studentRowNum][7]);
+                                                    System.out.print("Enter Credits Earned:- ");
+                                                    String editCredits = sc.nextLine();
+                                                    if(Validation.isValidCreditsEarned(Integer.parseInt(editCredits))){stuData[studentRowNum][7] = editCredits;}
+                                                break;
+                                            default:
+                                                    System.out.println("Enter a valid input");
+                                                break;
+                                        }       
+                                
+                                        fileHandler.writingToCSVFile(stuData, null);
+                                        System.out.println("student data updated successfully");
+                                }
+
+                            }catch(InputMismatchException e){
+                                    e.getStackTrace();
+                                    System.out.println("Input mismatch:- Enter the Correct Input type" );
+                                    System.out.println("Try again");
+                            }catch(IllegalArgumentException e){
+                                    e.getStackTrace();
+                                    System.out.println("Error - " + e.getMessage());
+                                    System.out.println("Try again");
+                            }                            
+
+
+                        }while(isEditing);
                     break;
 
                 case 3:
@@ -199,7 +219,6 @@ public class Menu {
                     break;
 
                 case 4:
-
                         sc.nextLine();
                         System.out.println("=============================");
                         System.out.println("Enter course to filter");
@@ -213,7 +232,7 @@ public class Menu {
                                 isFound = true;
                             }
                         }
-
+                        
                         if(!isFound){
                             System.out.println("No Students are with " + userCourseEntered + " course");
                         }
@@ -341,19 +360,80 @@ public class Menu {
                 case 8:
                         System.out.println("Credit Anallysis");
                         for(int i = 0; i < stuData.length; i++){
+                            if(Integer.parseInt(stuData[i][7].trim()) >= 240){
+                                System.out.println("ready to graduate students");
+                                System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: Student ID: " + stuData[i][0] + " :: Credits Earned: " + stuData[i][7]);
+                            }
+                            else if(Integer.parseInt(stuData[i][7].trim()) < 240 && Integer.parseInt(stuData[i][7].trim()) >= 120){
+                                System.out.println("Students need to earn more credits to graduate");
+                                System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: Student ID: " + stuData[i][0] + " :: Credits Earned: " + stuData[i][7]);
+                            }
+                            else if(Integer.parseInt(stuData[i][7].trim()) < 120){
+                                System.out.println("Students need to earn a lot more credits to graduate");
+                                System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: Student ID: " + stuData[i][0] + " :: Credits Earned: " + stuData[i][7]);
+                            }
+                            else{
+                                System.out.println("Error - invalid credits data");
+                            }
+
                              
                         }
 
                     break;
 
                 case 9:
-                        isExit = true;
+                        doesExits = true;
                     break;
 
             }
 
 
-            return isExit;
+        return doesExits;
     }
 }
 
+
+class Validation{
+    public static Boolean isValidStudentID(String studentID){
+        if(studentID != null){
+            if(studentID.matches("^S\\d{7}$")){
+                return true;   
+            }else{throw new IllegalArgumentException("Invalid student ID format. It should start with 'S' followed by 7 digits.");}
+        }else{throw new IllegalArgumentException("Student ID cannot be a null value");}//display a custom error message
+    }
+
+    public static Boolean isValidName(String name){
+        if(name != null){
+            return true;
+        }else{throw new IllegalArgumentException("First name or last name cannot be null");}
+    }
+
+    public static Boolean isValidYearLevel(int yearLevel){
+        if(yearLevel > 0 && yearLevel < 5){
+            return true;
+        }else{throw new IllegalArgumentException("Year level cannot be a null value");}
+    }
+
+    public static Boolean isValidCWA(Double cwa){
+        if(cwa >=0 && cwa < 101){
+            return true;
+        }else{throw new IllegalArgumentException("CWA must be between 0 and 100");}
+    }
+
+    public static Boolean isValidStatus(String status){
+        if(status != null){
+            if(status.equalsIgnoreCase("FT") || status.equalsIgnoreCase("PT")){
+                return true;
+            }else{throw new IllegalArgumentException("Status should be either FT or PT");}
+
+        }else{throw new IllegalArgumentException("Status cannot be a null value");}
+    }
+
+    public static Boolean isValidCreditsEarned(int creditEarned){
+        if(creditEarned >=0 ){
+            return true;
+        }else{throw new IllegalArgumentException("Credits earned must be greater than 0");}
+    }
+
+
+}

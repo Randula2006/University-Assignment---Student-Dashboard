@@ -1,9 +1,9 @@
 public class Details {
-    String courseEnrolled;
-    int year;
-    Double CWA;
-    String studyStatus;
-    int credEarned;
+    private String courseEnrolled;
+    private int year;
+    private Double CWA;
+    private String studyStatus;
+    private int credEarned;
 
     public Details(String courseEnrolled, int year, Double CWA, String studyStatus, int credEarned) {
         setCourse(courseEnrolled);
@@ -21,20 +21,17 @@ public class Details {
             this.courseEnrolled = course;  
         }else{throw new IllegalArgumentException("Course cannot be a null value");}//display a custom error message
     }
-
     public void setYearLevel(int yearLevel){
         if(yearLevel > 0 && yearLevel < 5){
             this.year = yearLevel;
 
         }else{throw new IllegalArgumentException("Year level cannot be a null value");}
     }
-
     public void setCwa(Double cwa){
         if(cwa >=0 && cwa < 101){
             this.CWA = cwa;
         }else{throw new IllegalArgumentException("CWA must be between 0 and 100");}
     }
-
     public void setStatus(String status){
         if(status != null){
             if(status.equalsIgnoreCase("FT") || status.equalsIgnoreCase("PT")){
@@ -43,7 +40,6 @@ public class Details {
 
         }else{throw new IllegalArgumentException("Status cannot be a null value");}
     }
-
     public void setCreditsEarned(int creditEarned){
         if(creditEarned >=0 ){
             this.credEarned = creditEarned;
