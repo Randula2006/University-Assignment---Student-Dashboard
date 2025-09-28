@@ -51,56 +51,38 @@ public class Menu {
                         sc.nextLine(); //to stop consuming this input
 
                         // previous version
-                        // if(newStuID != null && newStuFirstName != null && newStuLastName != null && newCourseEnrolled != null){
-                        //     // previous version
-                        //     // String[] studentIDFormat = newStuID.split("");
-                        //     //     if(studentIDFormat[0].equals("S")){
-                        //     //         for(int i = 1; i < studentIDFormat.length; i++){
-                        //     //             if(Character.isDigit(studentIDFormat[i].charAt(0))){
-                        //     //                 isStuIDinFormat = true;
-                        //     //             }
-                        //     //             else{
-                        //     //             System.out.println("Student ID is not in format - 8 characters required.");
-                        //     //             isExit = true;
-                        //     //             break;
-                        //     //             }
-                        //     //         }                    
-                        //     // }
-                        //         if(newStuID.matches("S\\d{7}")){ //using regex to identify it input items are digits or a specific value
-                        //             isStuIDinFormat = true;
-                        //         }
-                        //         else{
-                        //             System.out.println("Student ID is not in format");
-                        //             isExit = true;
-                        //             break;
-                        //         }
-                        //     if(isStuIDinFormat && (newYearLevel > 0 && newYearLevel < 5)){
-                        //         if(newStuCWA >= 0 && newStuCWA <= 100){
-                        //             if(newStudyStatus.equals("FT") || newStudyStatus.equals("PT")){
-                        //                 if(newCredEarn >= 0 && newCredEarn <= 400 ){                                          
-                        //                     Student newStudentRecord = new Student(newStuID, newStuFirstName, newStuLastName, newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);
-                        //                     String[] data = newStudentRecord.getStudentData();                    
-                        //                     fileHandler.writingToCSVFile(stuData , data);
-                        //                     System.out.println("Student data has been validated");
-                        //                 }else{}
-                        //             }else{System.out.println("Styudy Status should be (Either FT or PT) values");}
-                        //         }else{ System.out.println("CWA creadits earned by a student must be within range");}
-                        //     }else{System.out.println("student year should be between 1 to 4");}
-                        // }else{System.out.println("student ID , FIRST name , LAST name OR Course enrolled are required");}
-                        Boolean isValidated = Validation.EntryValidation(newStuID, newStuFirstName, newStuLastName, newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);
-                        if(isValidated){
-                            Student newStudentRecord = new Student(newStuID, newStuFirstName, newStuLastName, newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);
-                            String[] data = newStudentRecord.getStudentData();                    
-                            fileHandler.writingToCSVFile(stuData , data);
-                            System.out.println("Student data has been validated");                            
-                        }
+                        Details details = new Details(newCourseEnrolled, newYearLevel, newStuCWA, newStudyStatus, newCredEarn);                                        
+                        Student newStudentRecord = new Student(newStuID, newStuFirstName, newStuLastName, details);
+                        String[] data = newStudentRecord.getStudentData();                    
+                        fileHandler.writingToCSVFile(stuData , data);
+                        System.out.println("Student data has been validated");
 
-                        isExit = true;
+                            // Details details = new Details(
+                            //     newCourseEnrolled,
+                            //     newYearLevel,
+                            //     newStuCWA,
+                            //     newStudyStatus,
+                            //     newCredEarn
+                            // );
+                            // Student newStudentRecord = new Student(
+                            //     newStuID,
+                            //     newStuFirstName,
+                            //     newStuLastName,
+                            //     details
+                            // );
+                            // String[] data = newStudentRecord.getStudentData();                    
+                            // fileHandler.writingToCSVFile(stuData , data);
+                            // System.out.println("Student data has been validated");                            
                         break;
 
                     }catch(InputMismatchException e){
                         e.getStackTrace();
-                        System.out.println("Input mismatch" + e);
+                        System.out.println("Input mismatch:- Enter the Correct Input type" );
+                        isExit = true;
+                        break;
+                    }catch(IllegalArgumentException e){
+                        e.getStackTrace();
+                        System.out.println("Error - " + e.getMessage());
                         isExit = true;
                         break;
                     }
@@ -328,6 +310,7 @@ public class Menu {
                             Final_courses[i] = courses[i];
                         }
 
+                        // calculate avarage cwa for each course
                         for(int i = 0; i < Final_courses.length; i++){
                             Double sum = .0;
                             int count2 = 0;
@@ -340,7 +323,7 @@ public class Menu {
                             System.out.println(Final_courses[i] + " Course Avarage CWA: " + sum/count2);   
                         }
 
-                        System.out.println(Arrays.toString(Final_courses));
+                        // System.out.println(Arrays.toString(Final_courses));
                         // previous unfinished versions
                         // Double sum = .0;
                         // int count2 = 0;
@@ -356,6 +339,10 @@ public class Menu {
                     break;
 
                 case 8:
+                        System.out.println("Credit Anallysis");
+                        for(int i = 0; i < stuData.length; i++){
+                             
+                        }
 
                     break;
 

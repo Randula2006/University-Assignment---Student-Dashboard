@@ -1,34 +1,21 @@
 public class Student {
-    String studentID;
-    String studentFName;
-    String studentLName;
-    String courseEnrolled;
-    int Year;
-    double CWA;
-    String studyStatus;
-    int credEarned;
+    private String studentID;
+    private String studentFName;
+    private String studentLName;
 
+    private Details details;
     private String[] studentData = new String[8];
 
-    Student(String studentID , String studentFName , String studentLName , String courseEnrolled , int Year, double CWA , String studyStatus , int credEarned){
-        this.studentID = studentID;
-        this.studentFName = studentFName;
-        this.studentLName = studentLName;
-        this.courseEnrolled = courseEnrolled;
-        this.Year = Year;
-        this.CWA = CWA;
-        this.studyStatus = studyStatus;
-        this.credEarned = credEarned;
-
-
-        studentData[0] = studentID;
-        studentData[1] = studentFName;
-        studentData[2] = studentLName;
-        studentData[3] = courseEnrolled;
-        studentData[4] = String.valueOf(Year);
-        studentData[5] = String.valueOf(CWA);
-        studentData[6] = studyStatus;
-        studentData[7] = String.valueOf(credEarned); 
+    Student(String studentID , String studentFName , String studentLName , Details details){
+        setStudentID(studentID);
+        setStudentName(studentFName , studentLName);
+        this.details = details;
+   
+        studentData[3] = details.getCourse();
+        studentData[4] = String.valueOf(details.getYearLevel());
+        studentData[5] = String.valueOf(details.getCwa());
+        studentData[6] = details.getStatus();
+        studentData[7] = String.valueOf(details.getCreditsEarned()); 
 
 
     }
@@ -37,4 +24,22 @@ public class Student {
         return studentData;
     }
 
+    //setter methods
+    public void setStudentID(String studentID){
+        if(studentID != null){
+            if(studentID.matches("^S\\d{7}$")){
+                this.studentID = studentID;
+                studentData[0] = this.studentID;   
+            }else{throw new IllegalArgumentException("Invalid student ID format. It should start with 'S' followed by 7 digits.");}
+        }else{throw new IllegalArgumentException("Student ID cannot be a null value");}//display a custom error message
+    }
+
+    public void setStudentName(String fName , String lName){
+        if(fName != null && lName != null){
+            this.studentFName = fName;
+            this.studentLName = lName;
+            studentData[1] = this.studentFName;
+            studentData[2] = this.studentLName;
+        }else{throw new IllegalArgumentException("First name or last name cannot be null");}
+    }
 }
