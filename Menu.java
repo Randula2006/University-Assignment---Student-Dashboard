@@ -11,6 +11,7 @@ public class Menu {
         CsvResult result =  fileHandler.readingCsvFile();
         
 
+        try{
          //view all records - 3
         // String[] headers = result.headers;
         String[][] stuData = result.stuData;
@@ -226,13 +227,12 @@ public class Menu {
                         Boolean isFound = false;
 
                         for(int i = 0; i < stuData.length; i++){
-                            // System.out.println(stuData[i][3] + " " + stuData[i][0]);
                             if(userCourseEntered.equalsIgnoreCase(stuData[i][3].trim())){
                                 System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: StudentID: " + stuData[i][0]);
                                 isFound = true;
                             }
                         }
-                        
+
                         if(!isFound){
                             System.out.println("No Students are with " + userCourseEntered + " course");
                         }
@@ -242,26 +242,34 @@ public class Menu {
                     
 
                 case 5:
-                        
-                        System.out.println("Select Study Status");
-                        System.out.println("1) Full Time\n2) Part Time");
-                        int studyStatusEntered = sc.nextInt();
-                        
-                        if(studyStatusEntered == 1 ){
-                            for(int i = 0; i < stuData.length; i++){
-                                if(stuData[i][6].trim().equalsIgnoreCase("FT")){
-                                   System.out.println("Student ID: " + stuData[i][0] + " :: Student Name: " + stuData[i][1] + " " + stuData[i][2] );
+                            Boolean isexits;
+                       do{ 
+                            
+                            System.out.println("=============================");
+                            System.out.println("Select Study Status");
+                            System.out.println("1) Full Time\n2) Part Time");
+                            int studyStatusEntered = sc.nextInt();
+                            
+                            if(studyStatusEntered == 1 ){
+                                for(int i = 0; i < stuData.length; i++){
+                                    if(stuData[i][6].trim().equalsIgnoreCase("FT")){
+                                    System.out.println("Student ID: " + stuData[i][0] + " :: Student Name: " + stuData[i][1] + " " + stuData[i][2] );
+                                    }
                                 }
+                                isexits = true;
+
+                            }else if (studyStatusEntered == 2){
+                                for(int i = 0; i < stuData.length; i++){
+                                    if(stuData[i][6].trim().equalsIgnoreCase("PT")){
+                                    System.out.println("Student ID: " + stuData[i][0] + " :: Student Name: " + stuData[i][1] + " " + stuData[i][2] );
+                                    }
+                                }  
+                                isexits = true;                          
+                            }else{
+                                System.out.println("Enter a valid input");
+                                isexits = false;
                             }
-                        }else if (studyStatusEntered == 2){
-                            for(int i = 0; i < stuData.length; i++){
-                                if(stuData[i][6].trim().equalsIgnoreCase("PT")){
-                                   System.out.println("Student ID: " + stuData[i][0] + " :: Student Name: " + stuData[i][1] + " " + stuData[i][2] );
-                                }
-                            }                            
-                        }else{
-                            System.out.println("Enter a valid input");
-                        }
+                        }while(!isexits);
 
                     break;
 
@@ -289,6 +297,8 @@ public class Menu {
 
                 case 7:
                         System.out.println("Avarage CWA for Each course");
+                        System.out.println("=============================");
+
                         String[] courses = new String[stuData.length];
                         
                         //get all the courses stundets do
@@ -342,6 +352,7 @@ public class Menu {
                             System.out.println(Final_courses[i] + " Course Avarage CWA: " + sum/count2);   
                         }
 
+                        // prev version
                         // System.out.println(Arrays.toString(Final_courses));
                         // previous unfinished versions
                         // Double sum = .0;
@@ -374,21 +385,28 @@ public class Menu {
                             }
                             else{
                                 System.out.println("Error - invalid credits data");
-                            }
-
-                             
+                            }   
                         }
 
                     break;
 
                 case 9:
+                        System.out.println("Exiting from the program");
                         doesExits = true;
                     break;
 
             }
 
-
+        
         return doesExits;
+
+        }catch(InputMismatchException e){
+            e.getStackTrace();
+            System.out.println("Input mismatch:- Enter the Correct Input type" );
+            System.out.println("Try again");
+            return false;
+        }
+
     }
 }
 
