@@ -1,16 +1,16 @@
+import java.text.DecimalFormat;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
     
-    public Boolean menu(){
+    public Boolean menu(String file){
 
         
-        String fileName = "data.csv";
-        FileHandling fileHandler = new FileHandling(fileName);
+        FileHandling fileHandler = new FileHandling(file);
         CsvResult result =  fileHandler.readingCsvFile();
+        Boolean doesExits = false;
         
-
         try{
          //view all records - 3
         // String[] headers = result.headers;
@@ -22,7 +22,6 @@ public class Menu {
         System.out.println("Your options for this system are listed below");
         System.out.println("1> Add new student\n2> Edit student data\n3> View All student Info\n4> Filter by Course\n5> Filter by Status\n6> Hightest CWA\n7> Avarage CWA for each Course\n8> Credit analysis\n9> Exit Program");
         int userSelectedItem = sc.nextInt();
-        Boolean doesExits = false;
         
 
         switch (userSelectedItem) {
@@ -338,7 +337,9 @@ public class Menu {
                         for (int i = 0; i < uniqueCount; i++) {
                             Final_courses[i] = courses[i];
                         }
-
+                        
+                        //round the avarage to 2 decimal places
+                        DecimalFormat df = new DecimalFormat("0.00");
                         // calculate avarage cwa for each course
                         for(int i = 0; i < Final_courses.length; i++){
                             Double sum = .0;
@@ -349,7 +350,7 @@ public class Menu {
                                     count2++;
                                 }
                             }
-                            System.out.println(Final_courses[i] + " Course Avarage CWA: " + sum/count2);   
+                            System.out.println(Final_courses[i] + " Course Avarage CWA: " + df.format(sum/count2));   
                         }
 
                         // prev version
@@ -395,22 +396,24 @@ public class Menu {
                         doesExits = true;
                     break;
 
-            }
-
-        
-        return doesExits;
+                default:
+                        System.out.println("Enter a valid input");
+                        doesExits = false;
+                    break;
+                }
 
         }catch(InputMismatchException e){
             e.getStackTrace();
             System.out.println("Input mismatch:- Enter the Correct Input type" );
             System.out.println("Try again");
-            return false;
+            doesExits = false;
         }
 
+        return doesExits;
     }
 }
 
-
+//to validate inputs given by the user in the menu class
 class Validation{
     public static Boolean isValidStudentID(String studentID){
         if(studentID != null){

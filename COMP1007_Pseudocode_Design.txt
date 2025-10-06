@@ -1,0 +1,367 @@
+
+===========================================================
+COMP1007 - Pseudocode Design for University Student Records System
+Student-ID - 23610903
+Student-Name - M.D.U.Randula Gunathilake
+===========================================================
+
+CLASS Main
+-----------------------------------------------------------
+ALGORITHM main
+    IMPORT: none
+    EXPORT: none
+    ASSERTION: Executes the menu system until user exits
+        DECLARE isExit : BOOLEAN
+        DECLARE fileName : STRING
+        CREATE Scanner as Input reader
+        DISPLAY "Enter the CSV File name (with .csv extension)"
+        INPUT fileName
+
+        DO
+            CREATE menu AS Menu
+            SET isExit = menu.menu(fileName)
+        WHILE isExit = FALSE
+END ALGORITHM
+-----------------------------------------------------------
+
+
+CLASS Menu
+-----------------------------------------------------------
+METHOD: menu
+IMPORT: file (STRING)
+EXPORT: doesExit (BOOLEAN)
+ASSERTION: Displays main menu and processes user selections
+
+    INITIALISE fileHandler ← new FileHandling(file)
+    INITIALISE result ← fileHandler.readingCsvFile()
+    INITIALISE doesExit ← FALSE
+
+    DECLARE stuData : STRING[][] ← result.stuData
+    DECLARE userSelectedItem : INTEGER
+
+    DISPLAY menu options
+
+    TRY
+        INPUT userSelectedItem
+
+        SWITCH userSelectedItem
+            CASE 1:
+                CALL addNewStudent()
+            CASE 2:
+                CALL editStudent()
+            CASE 3:
+                CALL viewAllStudents()
+            CASE 4:
+                CALL filterByCourse()
+            CASE 5:
+                CALL filterByStatus()
+            CASE 6:
+                CALL highestCWA()
+            CASE 7:
+                CALL averageCWAForEachCourse()
+            CASE 8:
+                CALL creditAnalysis()
+            CASE 9:
+                DISPLAY "Exiting from program"
+                doesExit ← TRUE
+            DEFAULT:
+                DISPLAY "Enter a valid input"
+        END SWITCH
+
+    CATCH InputMismatchException
+        DISPLAY "Input mismatch: Enter the correct input type"
+    CATCH IllegalArgumentException
+        DISPLAY "Error - " + error message
+
+    RETURN doesExit
+END METHOD
+-----------------------------------------------------------
+
+
+METHOD: addNewStudent
+IMPORT: none
+EXPORT: none
+ASSERTION: Allows user to input details for new student and saves record
+
+    DO
+        TRY
+            PROMPT and READ studentID, firstName, lastName, course, yearLevel, CWA, status, creditsEarned
+            CREATE details ← new Details(course, yearLevel, CWA, status, creditsEarned)
+            CREATE newStudent ← new Student(studentID, firstName, lastName, details)
+            fileHandler.writingToCSVFile(stuData, newStudent.getStudentData())
+            DISPLAY "Student data has been validated"
+            EXIT LOOP
+        CATCH InputMismatchException
+            DISPLAY "Input mismatch - Try again"
+        CATCH IllegalArgumentException
+            DISPLAY "Error - " + error message + " Try again"
+    WHILE TRUE
+END METHOD
+-----------------------------------------------------------
+
+
+METHOD: editStudent
+IMPORT: none
+EXPORT: none
+ASSERTION: Allows user to modify existing student data
+
+    PROMPT for student ID
+    SEARCH stuData for matching student ID
+
+    IF student not found THEN
+        DISPLAY "Error - Enter valid student ID"
+    ELSE
+        DO
+            DISPLAY edit options
+            INPUT field to edit
+            VALIDATE new data using Validation class
+            UPDATE student record
+            WRITE updated data to file
+            DISPLAY "Student data updated successfully"
+        WHILE editing = TRUE
+    ENDIF
+END METHOD
+-----------------------------------------------------------
+
+
+METHOD: viewAllStudents
+IMPORT: none
+EXPORT: none
+ASSERTION: Displays all student names and IDs
+    FOR EACH student IN stuData
+        DISPLAY "Student Name: " + student.firstName + " " + student.lastName + " ID: " + student.ID
+    ENDFOR
+END METHOD
+-----------------------------------------------------------
+
+
+METHOD: filterByCourse
+IMPORT: none
+EXPORT: none
+ASSERTION: Displays all students enrolled in a user-specified course
+    PROMPT for course name
+    FOR EACH student IN stuData
+        IF student.course = course THEN
+            DISPLAY student details
+        ENDIF
+    ENDFOR
+    IF no matches FOUND THEN
+        DISPLAY "No Students enrolled in that course"
+    ENDIF
+END METHOD
+-----------------------------------------------------------
+
+
+METHOD: filterByStatus
+IMPORT: none
+EXPORT: none
+ASSERTION: Filters students based on study status
+    PROMPT for status (FT/PT)
+    FOR EACH student IN stuData
+        IF student.status = selectedStatus THEN
+            DISPLAY student details
+        ENDIF
+    ENDFOR
+END METHOD
+-----------------------------------------------------------
+
+
+METHOD: highestCWA
+IMPORT: none
+EXPORT: none
+ASSERTION: Displays student(s) with the highest CWA
+    SET maxCWA ← first student's CWA
+    FOR EACH student IN stuData
+        IF student.CWA > maxCWA THEN
+            maxCWA ← student.CWA
+            topStudent ← student
+        ENDIF
+    ENDFOR
+    DISPLAY topStudent and maxCWA
+END METHOD
+-----------------------------------------------------------
+
+
+METHOD: averageCWAForEachCourse
+IMPORT: none
+EXPORT: none
+ASSERTION: Calculates and displays average CWA per course
+
+    DECLARE courses[] ← unique course list
+    FOR EACH course IN courses
+        CALCULATE sumCWA and count
+        COMPUTE average ← sumCWA / count
+        DISPLAY course + " Average CWA: " + average
+    ENDFOR
+END METHOD
+-----------------------------------------------------------
+
+
+METHOD: creditAnalysis
+IMPORT: none
+EXPORT: none
+ASSERTION: Displays student eligibility based on credits earned
+    FOR EACH student IN stuData
+        IF creditsEarned >= 240 THEN
+            DISPLAY "Ready to graduate"
+        ELSE IF creditsEarned >= 120 THEN
+            DISPLAY "Needs more credits"
+        ELSE
+            DISPLAY "Needs a lot more credits"
+        ENDIF
+    ENDFOR
+END METHOD
+-----------------------------------------------------------
+
+--IN MENU.java--
+CLASS Validation
+-----------------------------------------------------------
+STATIC METHOD: isValidStudentID
+IMPORT: studentID (STRING)
+EXPORT: BOOLEAN
+    IF studentID matches "S\d{7}" THEN
+        RETURN TRUE
+    ELSE
+        THROW "Invalid ID format"
+    ENDIF
+-----------------------------------------------------------
+
+STATIC METHOD: isValidName
+IMPORT: name (STRING)
+EXPORT: BOOLEAN
+RETURN name NOT NULL
+-----------------------------------------------------------
+
+STATIC METHOD: isValidYearLevel
+IMPORT: yearLevel (INTEGER)
+EXPORT: BOOLEAN
+IF 0 < yearLevel < 5 THEN RETURN TRUE ELSE THROW ERROR
+-----------------------------------------------------------
+
+STATIC METHOD: isValidCWA
+IMPORT: cwa (REAL)
+EXPORT: BOOLEAN
+IF 0 <= cwa <= 100 THEN RETURN TRUE ELSE THROW ERROR
+-----------------------------------------------------------
+
+STATIC METHOD: isValidStatus
+IMPORT: status (STRING)
+EXPORT: BOOLEAN
+IF status = "FT" OR status = "PT" THEN RETURN TRUE ELSE THROW ERROR
+-----------------------------------------------------------
+
+STATIC METHOD: isValidCreditsEarned
+IMPORT: creditsEarned (INTEGER)
+EXPORT: BOOLEAN
+IF creditsEarned >= 0 THEN RETURN TRUE ELSE THROW ERROR
+-----------------------------------------------------------
+
+
+CLASS Student
+-----------------------------------------------------------
+CLASS FIELDS:
+studentID (STRING)
+studentFName (STRING)
+studentLName (STRING)
+details (Details)
+studentData (STRING ARRAY[8])
+
+CONSTRUCTOR with PARAMETERS
+IMPORT: studentID, studentFName, studentLName, details (Details)
+EXPORT: none
+ASSERTION: Creates a new student record with validated details
+
+CALL setStudentID(studentID)
+CALL setStudentName(studentFName)
+CALL setStudentLName(studentLName)
+SET studentData[3..7] FROM details
+-----------------------------------------------------------
+
+ACCESSOR: getStudentData
+EXPORT: studentData (STRING[])
+-----------------------------------------------------------
+
+MUTATOR: setStudentID
+IMPORT: studentID (STRING)
+IF valid format THEN
+    studentID ← value
+    studentData[0] ← value
+ELSE THROW ERROR
+-----------------------------------------------------------
+
+MUTATOR: setStudentName
+IMPORT: fName (STRING)
+IF fName NOT NULL THEN
+    studentFName ← fName
+    studentData[1] ← fName
+ELSE THROW ERROR
+-----------------------------------------------------------
+
+MUTATOR: setStudentLName
+IMPORT: lName (STRING)
+IF lName NOT NULL THEN
+    studentLName ← lName
+    studentData[2] ← lName
+ELSE THROW ERROR
+-----------------------------------------------------------
+
+
+CLASS Details
+-----------------------------------------------------------
+CLASS FIELDS:
+courseEnrolled (STRING)
+year (INTEGER)
+CWA (REAL)
+studyStatus (STRING)
+credEarned (INTEGER)
+
+CONSTRUCTOR with PARAMETERS
+IMPORT: courseEnrolled, year, CWA, studyStatus, credEarned
+EXPORT: none
+ASSERTION: Creates Details object with validated inputs
+
+CALL setCourse(courseEnrolled)
+CALL setYearLevel(year)
+CALL setCwa(CWA)
+CALL setStatus(studyStatus)
+CALL setCreditsEarned(credEarned)
+-----------------------------------------------------------
+
+MUTATORS & ACCESSORS for each field with input validation as per design.
+
+CLASS FileHandling
+-----------------------------------------------------------
+CLASS FIELDS:
+headers (STRING[])
+File (STRING)
+
+CONSTRUCTOR with PARAMETERS
+IMPORT: file (STRING)
+EXPORT: none
+-----------------------------------------------------------
+
+METHOD: readingCsvFile
+IMPORT: none
+EXPORT: CsvResult
+ASSERTION: Reads data from CSV file and returns headers and student data
+-----------------------------------------------------------
+
+METHOD: writingToCSVFile
+IMPORT: prevStuData (STRING[][]), studentDataArr (STRING[])
+EXPORT: none
+ASSERTION: Writes data back to the CSV file with proper formatting
+-----------------------------------------------------------
+
+
+CLASS CsvResult
+-----------------------------------------------------------
+CLASS FIELDS:
+headers (STRING[])
+stuData (STRING[][])
+
+CONSTRUCTOR with PARAMETERS
+IMPORT: headers, stuData
+EXPORT: none
+-----------------------------------------------------------
+
+END

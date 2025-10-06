@@ -4,7 +4,7 @@ public class FileHandling {
     String[] headers = null;
     String File;
 
-     //storing the CSV file .reason - if user starts with a file there is no need to get it  again and again
+     //storing the CSV file reason - if user starts with a file there is no need to get it  again and again
     public FileHandling(String file){
         this.File = file;
     }
@@ -16,7 +16,7 @@ public class FileHandling {
 
 
         // Count total rows
-        try (BufferedReader rowReader = new BufferedReader(new FileReader(File))) {
+        try (BufferedReader rowReader = new BufferedReader(new FileReader(this.File))) {
             while (rowReader.readLine() != null) rows++;
         } catch (Exception e) {
             e.getStackTrace();
@@ -27,7 +27,7 @@ public class FileHandling {
         String[][] stuData = new String[rows - 1][]; // first row = header
         int counter = 0;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(File))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(this.File))) {
 
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(",");
@@ -79,7 +79,7 @@ public class FileHandling {
 
 
     private void writingFunction(String item , int count ){
-        try(PrintWriter pw = new PrintWriter(new FileOutputStream(File , true))){
+        try(PrintWriter pw = new PrintWriter(new FileOutputStream(this.File , true))){
             int CSVLineLength = 7; 
             if(count < CSVLineLength){
                 //much efficient
@@ -109,7 +109,7 @@ public class FileHandling {
 
     //overloaded function - headers array
     private void writingFunction(){
-        try(PrintWriter pw = new PrintWriter(File)){
+        try(PrintWriter pw = new PrintWriter(this.File)){
             for(int i = 0; i < headers.length; i++){
                 if(i == 7){
                     pw.println(headers[i]);
