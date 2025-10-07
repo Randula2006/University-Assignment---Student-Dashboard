@@ -19,6 +19,27 @@ The app provides the functions it can handle in a command line interface.
 
 Each student information is extracted from the CSV file and all the new information gethered will be written into the CSV document again. 
 
+
+
+## CheckList of Features
+
+**All the features and functionalities are working**
+
+- [x] Design Requirements
+- [x] Functionality of the program
+        - [x] add New student
+        - [x] Edit student Data
+        - [x] View All student Info
+        - [x] Filter by course
+        - [x] Filter by status
+        - [x] Highest CWA
+        - [x] Avarage CWA for Each Course
+        - [x] Credit Analysis
+        - [x] Exiting the program
+- [x] File Handling
+- [x] Error handling and Validation
+- [x] Menu System
+
 ## Validation checks
 
 when student data added to a new records the it checks sevaral validation to store the most quality data onto the records.
