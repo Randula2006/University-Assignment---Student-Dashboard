@@ -10,17 +10,37 @@ CLASS Main
 ALGORITHM main
     IMPORT: none
     EXPORT: none
-    ASSERTION: Executes the menu system until user exits
+    ASSERTION: Executes the menu system if the specified CSV file exsists.
+
         DECLARE isExit : BOOLEAN
         DECLARE fileName : STRING
+        DECLARE file : File
         CREATE Scanner as Input reader
+        
         DISPLAY "Enter the CSV File name (with .csv extension)"
         INPUT fileName
 
-        DO
-            CREATE menu AS Menu
-            SET isExit = menu.menu(fileName)
-        WHILE isExit = FALSE
+        IF fileName is EMPTY THEN 
+            DISPLAY "No file name provided. Exiting the program"
+        ELSE
+            SET file ← new File(fileName)
+
+            IF file exists AND file is not a directory THEN
+                DISPLAY "File Found" + fileName 
+
+                DO
+                    CREATE menu AS Menu
+                    SET isExit = menu.menu(fileName)
+                WHILE isExit = FALSE
+
+                CLOSE Scanner
+            ELSE
+                DISPLAY "File not found:" + fileName
+                DISPLAY "Please ensure the file exists in the specified path"
+                DISPLAY "Exiting the program"
+            END IF
+        END IF
+
 END ALGORITHM
 -----------------------------------------------------------
 

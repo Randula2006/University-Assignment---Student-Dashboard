@@ -25,12 +25,12 @@ public class Details {
         if(yearLevel > 0 && yearLevel < 5){
             this.year = yearLevel;
 
-        }else{throw new IllegalArgumentException("Year level cannot be a null value");}
+        }else{throw new IllegalArgumentException("Year level cannot be a null value AND should be in range 1 to 4");}
     }
     public void setCwa(Double cwa){
         if(cwa >=0 && cwa < 101){
             this.CWA = cwa;
-        }else{throw new IllegalArgumentException("CWA must be between 0 and 100");}
+        }else{throw new IllegalArgumentException("CWA cannot be a Null value AND CWA must be between 0 and 100");}
     }
     public void setStatus(String status){
         if(status != null){

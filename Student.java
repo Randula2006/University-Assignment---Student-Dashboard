@@ -28,6 +28,11 @@ public class Student {
     //setter methods
     public void setStudentID(String studentID){
         if(studentID != null){
+// Citation:- 
+            // Title: Java Regex Validation for a pattern 
+            // Date: 2017
+            // Availability: https://stackoverflow.com/questions/44932927/regex-for-validating-a-pattern-in-java 
+            //               https://www.w3schools.com/java/java_regex.asp
             if(studentID.matches("^S\\d{7}$")){
                 this.studentID = studentID;
                 studentData[0] = this.studentID;   
@@ -41,7 +46,7 @@ public class Student {
             
             studentData[1] = this.studentFName;
             
-        }else{throw new IllegalArgumentException("First name or last name cannot be null");}
+        }else{throw new IllegalArgumentException("First name cannot be null");}
     }
 
     public void setStudentLName(String lName){

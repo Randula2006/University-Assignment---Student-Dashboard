@@ -6,7 +6,6 @@ public class Menu {
     
     public Boolean menu(String file){
 
-        
         FileHandling fileHandler = new FileHandling(file);
         CsvResult result =  fileHandler.readingCsvFile();
         Boolean doesExits = false;
@@ -202,6 +201,11 @@ public class Menu {
                                     e.getStackTrace();
                                     System.out.println("Input mismatch:- Enter the Correct Input type" );
                                     System.out.println("Try again");
+// Citation:-                             
+                            // Title: Java IlligalArgumentException Handling
+                            // Date: 2013
+                            // Availability: https://stackoverflow.com/questions/15208544/when-should-an-illegalargumentexception-be-thrown
+                            //               https://www.w3schools.com/java/java_ref_errors.asp
                             }catch(IllegalArgumentException e){
                                     e.getStackTrace();
                                     System.out.println("Error - " + e.getMessage());
@@ -403,7 +407,7 @@ public class Menu {
                 }
 
         }catch(InputMismatchException e){
-            e.getStackTrace();
+            e.getStackTrace(); // to log where the error is coming from
             System.out.println("Input mismatch:- Enter the Correct Input type" );
             System.out.println("Try again");
             doesExits = false;
@@ -432,13 +436,13 @@ class Validation{
     public static Boolean isValidYearLevel(int yearLevel){
         if(yearLevel > 0 && yearLevel < 5){
             return true;
-        }else{throw new IllegalArgumentException("Year level cannot be a null value");}
+        }else{throw new IllegalArgumentException("Year level cannot be a null value AND should be in range 1 to 4");}
     }
 
     public static Boolean isValidCWA(Double cwa){
         if(cwa >=0 && cwa < 101){
             return true;
-        }else{throw new IllegalArgumentException("CWA must be between 0 and 100");}
+        }else{throw new IllegalArgumentException("CWA cannot be a Null value AND CWA must be between 0 and 100");}
     }
 
     public static Boolean isValidStatus(String status){
