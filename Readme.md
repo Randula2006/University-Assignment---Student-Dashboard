@@ -1,24 +1,43 @@
-# Documentation
+# University Student Records CLI
 
-A Student Dashboard CLI made up using the OOP approach which can add a CSV file for student Information and it reads the file where is gets the first lines as the headers and all the other lines will be student information.
+A command-line interface (CLI) application for managing university student records. This tool reads student data from a CSV file and allows users to perform various operations such as adding, editing, viewing, and analyzing student information.
 
-## What does this do?
+## Features
 
-The app provides the functions it can handle in a command line interface.
+-   **Add New Student**: Add a new student record with complete validation for all fields.
+-   **Edit Student Data**: Modify the details of an existing student by searching for their Student ID.
+-   **View All Records**: Display a list of all students currently in the system.
+-   **Filter Records**:
+    -   Filter students by their enrolled course.
+    -   Filter students by their study status (Full-Time/Part-Time).
+-   **Data Analysis**:
+    -   Identify the student with the highest Course Weighted Average (CWA).
+    -   Calculate the average CWA for each course.
+    -   Analyze student credit totals to determine their graduation readiness.
 
-- Add student Data and a new record
-- Edit a current student information
-- View all student records in the CSV file
-- Filter student information 
-    - Filter by course selected by the student 
-    - Filter by the status student study
-- Analysis
-    - CWA analysis
-    - Credit analysis
+## Requirements
 
+-   Java Development Kit (JDK) 11 or newer.
 
-Each student information is extracted from the CSV file and all the new information gethered will be written into the CSV document again. 
+## How to Compile and Run
 
+1.  **Place Your Data File**: Ensure your student data CSV file (e.g., `data.csv`) is in the same directory as the `.java` files.
+
+2.  **Compile the Code**: Open a terminal or command prompt in the project directory and run the following command to compile all Java files:
+    ```bash
+    javac *.java
+    ```
+
+3.  **Run the Application**: Execute the program using the following command:
+    ```bash
+    java Main
+    ```
+
+4.  **Enter File Name**: The program will prompt you to enter the name of your CSV file. Type the full name (e.g., `data.csv`) and press Enter.
+
+## How to Use
+
+Once the application is running, you will be presented with a main menu. Enter the number corresponding to the action you wish to perform.
 
 
 ## CheckList of Features
@@ -27,16 +46,18 @@ Each student information is extracted from the CSV file and all the new informat
 
 - [x] Design Requirements
 - [x] Functionality of the program
-        - [x] add New student
-        - [x] Edit student Data
-        - [x] View All student Info
-        - [x] Filter by course
-        - [x] Filter by status
-        - [x] Highest CWA
-        - [x] Avarage CWA for Each Course
-        - [x] Credit Analysis
-        - [x] Exiting the program
+    - [x] Add New student
+    - [x] Edit student Data
+    - [x] View All student Info
+    - [x] Filter by course
+    - [x] Filter by status
+    - [x] Highest CWA
+    - [x] Average CWA for Each Course
+    - [x] Credit Analysis
+    - [x] Exiting the program
 - [x] File Handling
+    - [x] File Reading
+    - [x] File Writing
 - [x] Error handling and Validation
 - [x] Menu System
 
