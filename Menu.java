@@ -27,11 +27,16 @@ public class Menu {
                 case 1:
                         boolean isExit = false;
                         System.out.println("=============== Add new student ===============");
+                        sc.nextLine(); // to stop consuming the input
                     do{
                         try{
                             System.out.print("Enter student ID:-");
-                            sc.nextLine();  //to stop consuming this input
                             String newStuID = sc.nextLine();
+
+                            if(newStuID.trim().isEmpty()){
+                                System.out.print("Student ID cannot be empty. Please enter a student ID:- ");
+                                newStuID = sc.nextLine();
+                            }
                             System.out.print("Enter student First Name:-");
                             String newStuFirstName = sc.nextLine();
                             System.out.print("Enter student Last Name:-");
@@ -50,27 +55,37 @@ public class Menu {
                             int newCredEarn = sc.nextInt();
                             sc.nextLine(); //to stop consuming this input
 
-                            Details details = new Details(
-                                newCourseEnrolled,
-                                newYearLevel,
-                                newStuCWA,
-                                newStudyStatus,
-                                newCredEarn
-                            );                 
+                            boolean isStudentFound = false;
+                            //check if the student id already exists
+                            for(int i = 0; i < stuData.length; i++){
+                                if(stuData[i][0].equals(newStuID)){
+                                    isStudentFound = true;
+                                }
+                            }
+                            if(isStudentFound){
+                                throw new IllegalArgumentException("Student ID already exists. Please enter a unique Student ID.");
+                            }else{
+                                Details details = new Details(
+                                    newCourseEnrolled,
+                                    newYearLevel,
+                                    newStuCWA,
+                                    newStudyStatus,
+                                    newCredEarn
+                                );                 
 
-                            Student newStudentRecord = new Student(
-                                newStuID,
-                                newStuFirstName,
-                                newStuLastName,
-                                details
-                            );
+                                Student newStudentRecord = new Student(
+                                    newStuID,
+                                    newStuFirstName,
+                                    newStuLastName,
+                                    details
+                                );
 
-                            String[] data = newStudentRecord.getStudentData();
-                            // writing all student data to the csv file            
-                            fileHandler.writingToCSVFile(stuData , data);
-                            System.out.println("Student data has been validated");
-                            isExit = true; // exit the loop after successful addition
-                            // Details details = new Details(
+                                String[] data = newStudentRecord.getStudentData();
+                                // writing all student data to the csv file            
+                                fileHandler.writingToCSVFile(stuData , data);
+                                System.out.println("Student data has been validated");
+                                isExit = true; // exit the loop after successful addition
+                                // Details details = new Details(
                                 //     newCourseEnrolled,
                                 //     newYearLevel,
                                 //     newStuCWA,
@@ -86,11 +101,12 @@ public class Menu {
                                 // String[] data = newStudentRecord.getStudentData();                    
                                 // fileHandler.writingToCSVFile(stuData , data);
                                 // System.out.println("Student data has been validated");                            
-
+                            }
                         }catch(InputMismatchException e){
                             e.getStackTrace();
                             System.out.println("Input mismatch:- Enter the Correct Input type" );
                             System.out.println("Try again");
+                            sc.nextLine(); // to clear the invalid input
                             isExit = false;
 
                         }catch(IllegalArgumentException e){

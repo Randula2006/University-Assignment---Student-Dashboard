@@ -112,11 +112,23 @@ ASSERTION: Allows user to input details for new student and saves record
     DO
         TRY
             PROMPT and READ studentID, firstName, lastName, course, yearLevel, CWA, status, creditsEarned
-            
-            CREATE details ← new Details(course, yearLevel, CWA, status, creditsEarned)
-            CREATE newStudent ← new Student(studentID, firstName, lastName, details)
-            fileHandler.writingToCSVFile(stuData, newStudent.getStudentData())
-            DISPLAY "Student data has been validated"
+
+            DECLARE isStudentFound : BOOLEAN ← FALSE
+
+            FOR EACH student IN stuData
+                IF student.ID = studentID THEN
+                    SET isStudentFound ← TRUE
+                ENDIF
+            ENDFOR
+
+            IF isStudentFound = TRUE THEN
+                DISPLAY "Student ID already exists. Please enter a unique Student ID."
+            ELSE    
+                CREATE details ← new Details(course, yearLevel, CWA, status, creditsEarned)
+                CREATE newStudent ← new Student(studentID, firstName, lastName, details)
+                fileHandler.writingToCSVFile(stuData, newStudent.getStudentData())
+                DISPLAY "Student data has been validated"
+            ENDIF 
 
             EXIT LOOP
 
