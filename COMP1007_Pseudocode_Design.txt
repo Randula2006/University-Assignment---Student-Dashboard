@@ -22,7 +22,9 @@ ALGORITHM main
 
         IF fileName is EMPTY THEN 
             DISPLAY "No file name provided. Exiting the program"
+            
         ELSE
+
             SET file ← new File(fileName)
 
             IF file exists AND file is not a directory THEN
@@ -39,6 +41,7 @@ ALGORITHM main
                 DISPLAY "Please ensure the file exists in the specified path"
                 DISPLAY "Exiting the program"
             END IF
+
         END IF
 
 END ALGORITHM
@@ -94,6 +97,7 @@ ASSERTION: Displays main menu and processes user selections
         DISPLAY "Error - " + error message
 
     RETURN doesExit
+
 END METHOD
 -----------------------------------------------------------
 
@@ -106,15 +110,19 @@ ASSERTION: Allows user to input details for new student and saves record
     DO
         TRY
             PROMPT and READ studentID, firstName, lastName, course, yearLevel, CWA, status, creditsEarned
+            
             CREATE details ← new Details(course, yearLevel, CWA, status, creditsEarned)
             CREATE newStudent ← new Student(studentID, firstName, lastName, details)
             fileHandler.writingToCSVFile(stuData, newStudent.getStudentData())
             DISPLAY "Student data has been validated"
+
             EXIT LOOP
+
         CATCH InputMismatchException
             DISPLAY "Input mismatch - Try again"
         CATCH IllegalArgumentException
             DISPLAY "Error - " + error message + " Try again"
+
     WHILE TRUE
 END METHOD
 -----------------------------------------------------------
@@ -134,10 +142,12 @@ ASSERTION: Allows user to modify existing student data
         DO
             DISPLAY edit options
             INPUT field to edit
+
             VALIDATE new data using Validation class
             UPDATE student record
             WRITE updated data to file
             DISPLAY "Student data updated successfully"
+
         WHILE editing = TRUE
     ENDIF
 END METHOD
@@ -148,9 +158,11 @@ METHOD: viewAllStudents
 IMPORT: none
 EXPORT: none
 ASSERTION: Displays all student names and IDs
+
     FOR EACH student IN stuData
         DISPLAY "Student Name: " + student.firstName + " " + student.lastName + " ID: " + student.ID
     ENDFOR
+
 END METHOD
 -----------------------------------------------------------
 
@@ -159,15 +171,19 @@ METHOD: filterByCourse
 IMPORT: none
 EXPORT: none
 ASSERTION: Displays all students enrolled in a user-specified course
+
     PROMPT for course name
+
     FOR EACH student IN stuData
         IF student.course = course THEN
             DISPLAY student details
         ENDIF
     ENDFOR
+
     IF no matches FOUND THEN
         DISPLAY "No Students enrolled in that course"
     ENDIF
+
 END METHOD
 -----------------------------------------------------------
 
@@ -176,12 +192,16 @@ METHOD: filterByStatus
 IMPORT: none
 EXPORT: none
 ASSERTION: Filters students based on study status
+
     PROMPT for status (FT/PT)
+
     FOR EACH student IN stuData
         IF student.status = selectedStatus THEN
             DISPLAY student details
         ENDIF
+
     ENDFOR
+
 END METHOD
 -----------------------------------------------------------
 
@@ -190,14 +210,19 @@ METHOD: highestCWA
 IMPORT: none
 EXPORT: none
 ASSERTION: Displays student(s) with the highest CWA
+
     SET maxCWA ← first student's CWA
+
     FOR EACH student IN stuData
+
         IF student.CWA > maxCWA THEN
             maxCWA ← student.CWA
             topStudent ← student
         ENDIF
     ENDFOR
+
     DISPLAY topStudent and maxCWA
+    
 END METHOD
 -----------------------------------------------------------
 
@@ -208,11 +233,14 @@ EXPORT: none
 ASSERTION: Calculates and displays average CWA per course
 
     DECLARE courses[] ← unique course list
+
     FOR EACH course IN courses
         CALCULATE sumCWA and count
         COMPUTE average ← sumCWA / count
         DISPLAY course + " Average CWA: " + average
+
     ENDFOR
+
 END METHOD
 -----------------------------------------------------------
 
@@ -221,7 +249,9 @@ METHOD: creditAnalysis
 IMPORT: none
 EXPORT: none
 ASSERTION: Displays student eligibility based on credits earned
+
     FOR EACH student IN stuData
+
         IF creditsEarned >= 240 THEN
             DISPLAY "Ready to graduate"
         ELSE IF creditsEarned >= 120 THEN
@@ -229,6 +259,7 @@ ASSERTION: Displays student eligibility based on credits earned
         ELSE
             DISPLAY "Needs a lot more credits"
         ENDIF
+
     ENDFOR
 END METHOD
 -----------------------------------------------------------
@@ -239,6 +270,7 @@ CLASS Validation
 STATIC METHOD: isValidStudentID
 IMPORT: studentID (STRING)
 EXPORT: BOOLEAN
+
     IF studentID matches "S\d{7}" THEN
         RETURN TRUE
     ELSE
@@ -255,24 +287,28 @@ RETURN name NOT NULL
 STATIC METHOD: isValidYearLevel
 IMPORT: yearLevel (INTEGER)
 EXPORT: BOOLEAN
+
 IF 0 < yearLevel < 5 THEN RETURN TRUE ELSE THROW ERROR
 -----------------------------------------------------------
 
 STATIC METHOD: isValidCWA
 IMPORT: cwa (REAL)
 EXPORT: BOOLEAN
+
 IF 0 <= cwa <= 100 THEN RETURN TRUE ELSE THROW ERROR
 -----------------------------------------------------------
 
 STATIC METHOD: isValidStatus
 IMPORT: status (STRING)
 EXPORT: BOOLEAN
+
 IF status = "FT" OR status = "PT" THEN RETURN TRUE ELSE THROW ERROR
 -----------------------------------------------------------
 
 STATIC METHOD: isValidCreditsEarned
 IMPORT: creditsEarned (INTEGER)
 EXPORT: BOOLEAN
+
 IF creditsEarned >= 0 THEN RETURN TRUE ELSE THROW ERROR
 -----------------------------------------------------------
 
@@ -303,26 +339,33 @@ EXPORT: studentData (STRING[])
 
 MUTATOR: setStudentID
 IMPORT: studentID (STRING)
-IF valid format THEN
-    studentID ← value
-    studentData[0] ← value
-ELSE THROW ERROR
+
+    IF valid format THEN
+        studentID ← value
+        studentData[0] ← value
+
+    ELSE THROW ERROR
 -----------------------------------------------------------
 
 MUTATOR: setStudentName
 IMPORT: fName (STRING)
-IF fName NOT NULL THEN
-    studentFName ← fName
-    studentData[1] ← fName
-ELSE THROW ERROR
+
+    IF fName NOT NULL THEN
+
+        studentFName ← fName
+        studentData[1] ← fName
+
+    ELSE THROW ERROR
 -----------------------------------------------------------
 
 MUTATOR: setStudentLName
 IMPORT: lName (STRING)
-IF lName NOT NULL THEN
-    studentLName ← lName
-    studentData[2] ← lName
-ELSE THROW ERROR
+
+    IF lName NOT NULL THEN
+        studentLName ← lName
+        studentData[2] ← lName
+        
+    ELSE THROW ERROR
 -----------------------------------------------------------
 
 
@@ -363,12 +406,14 @@ EXPORT: none
 METHOD: readingCsvFile
 IMPORT: none
 EXPORT: CsvResult
+
 ASSERTION: Reads data from CSV file and returns headers and student data
 -----------------------------------------------------------
 
 METHOD: writingToCSVFile
 IMPORT: prevStuData (STRING[][]), studentDataArr (STRING[])
 EXPORT: none
+
 ASSERTION: Writes data back to the CSV file with proper formatting
 -----------------------------------------------------------
 
