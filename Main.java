@@ -8,8 +8,10 @@ public class Main{
         File file;
 
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the CSV file name (with .csv extension): ");
-        String fileName = scanner.nextLine();
+        System.out.print("Enter the CSV file name (without .csv extension): ");
+        String fileNameWithoutExtention = scanner.nextLine();
+        String fileName = fileNameWithoutExtention + ".csv";
+        System.out.println("Looking for file: " + fileName);
 
         if(fileName.trim().isEmpty()){
             System.out.println("No file name provided. Exiting the program.");

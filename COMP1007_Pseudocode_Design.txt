@@ -17,12 +17,14 @@ ALGORITHM main
         DECLARE file : File
         CREATE Scanner as Input reader
         
-        DISPLAY "Enter the CSV File name (with .csv extension)"
-        INPUT fileName
+        DISPLAY "Enter the CSV File name (without .csv extension)"
+        INPUT fileNameWithoutExtention
+
+        SET fileName ← fileNameWithoutExtention + ".csv"
 
         IF fileName is EMPTY THEN 
             DISPLAY "No file name provided. Exiting the program"
-            
+
         ELSE
 
             SET file ← new File(fileName)
