@@ -30,78 +30,166 @@ public class Menu {
                         sc.nextLine(); // to stop consuming the input
                     do{
                         try{
-                            System.out.print("Enter student ID:-");
-                            String newStuID = sc.nextLine();
-
-                            if(newStuID.trim().isEmpty()){
-                                System.out.print("Student ID cannot be empty. Please enter a student ID:- ");
-                                newStuID = sc.nextLine();
-                            }
-                            System.out.print("Enter student First Name:-");
-                            String newStuFirstName = sc.nextLine();
-                            System.out.print("Enter student Last Name:-");
-                            String newStuLastName = sc.nextLine();
-                            System.out.print("Enter Course Enrolled:-");
-                            String newCourseEnrolled = sc.nextLine();
-                            System.out.print("Enter Student's study year:-");
-                            int newYearLevel = sc.nextInt();
-                            sc.nextLine(); //to stop consuming this input
-                            System.out.print("Enter student's CWA:-");
-                            double newStuCWA = sc.nextDouble();
-                            sc.nextLine(); //to stop consuming this input
-                            System.out.print("Enter study Status:-");
-                            String newStudyStatus = sc.nextLine().toUpperCase();    
-                            System.out.print("Enter Credits earned by student:-");
-                            int newCredEarn = sc.nextInt();
-                            sc.nextLine(); //to stop consuming this input
-
-                            boolean isStudentFound = false;
-                            //check if the student id already exists
-                            for(int i = 0; i < stuData.length; i++){
-                                if(stuData[i][0].equals(newStuID)){
-                                    isStudentFound = true;
+                            // Student ID
+                            String newStuID = "";
+                            boolean validStuID = false;
+                            while (!validStuID) {
+                                System.out.print("Enter student ID:-");
+                                newStuID = sc.nextLine().trim();
+                                try {
+                                    if (Validation.isValidStudentID(newStuID)) {
+                                        // Check for duplicate ID
+                                        boolean isStudentFound = false;
+                                        for (int i = 0; i < stuData.length; i++) {
+                                            if (stuData[i][0].equals(newStuID)) {
+                                                isStudentFound = true;
+                                            }
+                                        }
+                                        if (isStudentFound) {
+                                            System.out.println("Student ID already exists. Please enter a unique Student ID.");
+                                        } else {
+                                            validStuID = true; // valid and unique
+                                        }
+                                    }
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
                                 }
                             }
-                            if(isStudentFound){
-                                throw new IllegalArgumentException("Student ID already exists. Please enter a unique Student ID.");
-                            }else{
-                                Details details = new Details(
-                                    newCourseEnrolled,
-                                    newYearLevel,
-                                    newStuCWA,
-                                    newStudyStatus,
-                                    newCredEarn
-                                );                 
 
-                                Student newStudentRecord = new Student(
-                                    newStuID,
-                                    newStuFirstName,
-                                    newStuLastName,
-                                    details
-                                );
-
-                                String[] data = newStudentRecord.getStudentData();
-                                // writing all student data to the csv file            
-                                fileHandler.writingToCSVFile(stuData , data);
-                                System.out.println("Student data has been validated");
-                                isExit = true; // exit the loop after successful addition
-                                // Details details = new Details(
-                                //     newCourseEnrolled,
-                                //     newYearLevel,
-                                //     newStuCWA,
-                                //     newStudyStatus,
-                                //     newCredEarn
-                                // );
-                                // Student newStudentRecord = new Student(
-                                //     newStuID,
-                                //     newStuFirstName,
-                                //     newStuLastName,
-                                //     details
-                                // );
-                                // String[] data = newStudentRecord.getStudentData();                    
-                                // fileHandler.writingToCSVFile(stuData , data);
-                                // System.out.println("Student data has been validated");                            
+                            // First Name
+                            String newStuFirstName = "";
+                            boolean validFirstName = false;
+                            while (!validFirstName) {
+                                System.out.print("Enter student First Name:-");
+                                newStuFirstName = sc.nextLine().trim();
+                                try {
+                                    if (Validation.isValidName(newStuFirstName)) {
+                                        validFirstName = true;
+                                    }
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
+                                }
                             }
+
+                            // Last Name
+                            String newStuLastName = "";
+                            boolean validLastName = false;
+                            while (!validLastName) {
+                                System.out.print("Enter student Last Name:-");
+                                newStuLastName = sc.nextLine().trim();
+                                try {
+                                    if (Validation.isValidName(newStuLastName)) {
+                                        validLastName = true;
+                                    }
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+
+                            // Course Enrolled
+                            String newCourseEnrolled = "";
+                            boolean validCourse = false;
+                            while (!validCourse) {
+                                System.out.print("Enter Course Enrolled:-");
+                                newCourseEnrolled = sc.nextLine().trim();
+                                try {
+                                    if (Validation.isValidCourse(newCourseEnrolled)) {
+                                        validCourse = true;
+                                    }
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+
+                            // Year Level
+                            int newYearLevel = 0;
+                            boolean validYearLevel = false;
+                            while (!validYearLevel) {
+                                System.out.print("Enter Student's study year:-");
+                                String input = sc.nextLine().trim();
+                                try {
+                                    newYearLevel = Integer.parseInt(input);
+                                    if (Validation.isValidYearLevel(newYearLevel)) {
+                                        validYearLevel = true;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Please enter a valid integer for year level.");
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+
+                            // CWA
+                            double newStuCWA = 0.0;
+                            boolean validCWA = false;
+                            while (!validCWA) {
+                                System.out.print("Enter student's CWA:-");
+                                String input = sc.nextLine().trim();
+                                try {
+                                    newStuCWA = Double.parseDouble(input);
+                                    if (Validation.isValidCWA(newStuCWA)) {
+                                        validCWA = true;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Please enter a valid number for CWA.");
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+
+                            // Study Status
+                            String newStudyStatus = "";
+                            boolean validStatus = false;
+                            while (!validStatus) {
+                                System.out.print("Enter study Status (FT/PT):-");
+                                newStudyStatus = sc.nextLine().trim().toUpperCase();
+                                try {
+                                    if (Validation.isValidStatus(newStudyStatus)) {
+                                        validStatus = true;
+                                    }
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+
+                            // Credits Earned
+                            int newCredEarn = 0;
+                            boolean validCredits = false;
+                            while (!validCredits) {
+                                System.out.print("Enter Credits earned by student:-");
+                                String input = sc.nextLine().trim();
+                                try {
+                                    newCredEarn = Integer.parseInt(input);
+                                    if (Validation.isValidCreditsEarned(newCredEarn)) {
+                                        validCredits = true;
+                                    }
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Please enter a valid integer for credits earned.");
+                                } catch (IllegalArgumentException e) {
+                                    System.out.println(e.getMessage());
+                                }
+                            }
+
+                            Details details = new Details(
+                                newCourseEnrolled,
+                                newYearLevel,
+                                newStuCWA,
+                                newStudyStatus,
+                                newCredEarn
+                            );                 
+
+                            Student newStudentRecord = new Student(
+                                newStuID,
+                                newStuFirstName,
+                                newStuLastName,
+                                details
+                            );
+
+                            String[] data = newStudentRecord.getStudentData();
+                            // writing all student data to the csv file            
+                            fileHandler.writingToCSVFile(stuData , data);
+                            System.out.println("Student data has been validated");
+                            isExit = true; // exit the loop after successful addition
                         }catch(InputMismatchException e){
                             e.getStackTrace();
                             System.out.println("Input mismatch:- Enter the Correct Input type" );
@@ -234,8 +322,9 @@ public class Menu {
 
                 case 3:
                         for (int i = 0; i < stuData.length; i++){
-                            System.out.println("Student Name:- " + stuData[i][1] + " " + stuData[i][2] + " : Student ID:- " + stuData[i][0]);
+                            System.out.println("* Student ID:- " + stuData[i][0] +" : Student Name:- " + stuData[i][1] + " " + stuData[i][2]);
                         }
+                        System.out.println("\nTotal number of students:- " + stuData.length + "\n");
                     break;
 
                 case 4:
@@ -270,19 +359,23 @@ public class Menu {
                             int studyStatusEntered = sc.nextInt();
                             
                             if(studyStatusEntered == 1 ){
+                                System.out.println("Full Time Students\n");
                                 for(int i = 0; i < stuData.length; i++){
                                     if(stuData[i][6].trim().equalsIgnoreCase("FT")){
                                     System.out.println("Student ID: " + stuData[i][0] + " :: Student Name: " + stuData[i][1] + " " + stuData[i][2] );
                                     }
                                 }
+                                System.out.println("");
                                 isexits = true;
 
                             }else if (studyStatusEntered == 2){
+                                System.out.println("Part Time Students\n");
                                 for(int i = 0; i < stuData.length; i++){
                                     if(stuData[i][6].trim().equalsIgnoreCase("PT")){
                                     System.out.println("Student ID: " + stuData[i][0] + " :: Student Name: " + stuData[i][1] + " " + stuData[i][2] );
                                     }
                                 }  
+                                System.out.println("");
                                 isexits = true;                          
                             }else{
                                 System.out.println("Enter a valid input");
@@ -295,7 +388,8 @@ public class Menu {
                 case 6:
 
                         System.out.println("=============================");
-
+                        System.out.println("Hightest CWA marks");
+                        System.out.println("=============================");
                         try{
                             int rowNum = 0;
                             Double max = Double.parseDouble(stuData[0][5]);
@@ -371,6 +465,7 @@ public class Menu {
                                 }
                             }
                             System.out.println(Final_courses[i] + " Course Avarage CWA: " + df.format(sum/count2));   
+                            System.out.println("");
                         }
 
                         // prev version
@@ -395,14 +490,17 @@ public class Menu {
                             if(Integer.parseInt(stuData[i][7].trim()) >= 240){
                                 System.out.println("ready to graduate students");
                                 System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: Student ID: " + stuData[i][0] + " :: Credits Earned: " + stuData[i][7]);
+                                System.out.println();
                             }
                             else if(Integer.parseInt(stuData[i][7].trim()) < 240 && Integer.parseInt(stuData[i][7].trim()) >= 120){
                                 System.out.println("Students need to earn more credits to graduate");
                                 System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: Student ID: " + stuData[i][0] + " :: Credits Earned: " + stuData[i][7]);
+                                System.out.println();
                             }
                             else if(Integer.parseInt(stuData[i][7].trim()) < 120){
                                 System.out.println("Students need to earn a lot more credits to graduate");
                                 System.out.println("Student Name: " + stuData[i][1] + " " + stuData[i][2] + " :: Student ID: " + stuData[i][0] + " :: Credits Earned: " + stuData[i][7]);
+                                System.out.println();
                             }
                             else{
                                 System.out.println("Error - invalid credits data");
@@ -436,7 +534,7 @@ public class Menu {
 //to validate inputs given by the user in the menu class
 class Validation{
     public static Boolean isValidStudentID(String studentID){
-        if(studentID != null){
+        if(studentID != null || !studentID.isEmpty()){
             if(studentID.matches("^S\\d{7}$")){
                 return true;   
             }else{throw new IllegalArgumentException("Invalid student ID format. It should start with 'S' followed by 7 digits.");}
@@ -444,9 +542,15 @@ class Validation{
     }
 
     public static Boolean isValidName(String name){
-        if(name != null){
+        if(name != null && !name.isEmpty()){
             return true;
         }else{throw new IllegalArgumentException("First name or last name cannot be null");}
+    }
+
+    public static Boolean isValidCourse(String course){
+        if(course != null && !course.isEmpty()){
+            return true;
+        }else{throw new IllegalArgumentException("Course cannot be a null value");}
     }
 
     public static Boolean isValidYearLevel(int yearLevel){
@@ -462,7 +566,7 @@ class Validation{
     }
 
     public static Boolean isValidStatus(String status){
-        if(status != null){
+        if(status != null && !status.isEmpty()){
             if(status.equalsIgnoreCase("FT") || status.equalsIgnoreCase("PT")){
                 return true;
             }else{throw new IllegalArgumentException("Status should be either FT or PT");}

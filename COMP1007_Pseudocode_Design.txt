@@ -104,41 +104,175 @@ END METHOD
 -----------------------------------------------------------
 
 
-METHOD: addNewStudent
-IMPORT: none
-EXPORT: none
-ASSERTION: Allows user to input details for new student and saves record
+METHOD addNewStudent
+    DECLARE isExit : BOOLEAN ← FALSE
 
     DO
         TRY
-            PROMPT and READ studentID, firstName, lastName, course, yearLevel, CWA, status, creditsEarned
+            DISPLAY "=============== Add new student ==============="
 
-            DECLARE isStudentFound : BOOLEAN ← FALSE
+            // ===== Student ID Validation =====
+            DECLARE validStuID : BOOLEAN ← FALSE
+            DO
+                PROMPT "Enter student ID:-"
+                READ studentID
+                TRY
+                    IF Validation.isValidStudentID(studentID) THEN
+                        SET isStudentFound ← FALSE
+                        FOR i ← 0 TO LENGTH(stuData) - 1
+                            IF stuData[i][0] = studentID THEN
+                                SET isStudentFound ← TRUE
+                            ENDIF
+                        ENDFOR
 
-            FOR EACH student IN stuData
-                IF student.ID = studentID THEN
-                    SET isStudentFound ← TRUE
-                ENDIF
-            ENDFOR
+                        IF isStudentFound = TRUE THEN
+                            DISPLAY "Student ID already exists. Please enter a unique Student ID."
+                        ELSE
+                            SET validStuID ← TRUE
+                        ENDIF
+                    ENDIF
+                CATCH IllegalArgumentException
+                    DISPLAY error message
+                ENDTRY
+            WHILE validStuID = FALSE
 
-            IF isStudentFound = TRUE THEN
-                DISPLAY "Student ID already exists. Please enter a unique Student ID."
-            ELSE    
-                CREATE details ← new Details(course, yearLevel, CWA, status, creditsEarned)
-                CREATE newStudent ← new Student(studentID, firstName, lastName, details)
-                fileHandler.writingToCSVFile(stuData, newStudent.getStudentData())
-                DISPLAY "Student data has been validated"
-            ENDIF 
 
-            EXIT LOOP
+            // ===== First Name Validation =====
+            DECLARE validFirstName : BOOLEAN ← FALSE
+            DO
+                PROMPT "Enter student First Name:-"
+                READ firstName
+                TRY
+                    IF Validation.isValidName(firstName) THEN
+                        SET validFirstName ← TRUE
+                    ENDIF
+                CATCH IllegalArgumentException
+                    DISPLAY error message
+                ENDTRY
+            WHILE validFirstName = FALSE
+
+
+            // ===== Last Name Validation =====
+            DECLARE validLastName : BOOLEAN ← FALSE
+            DO
+                PROMPT "Enter student Last Name:-"
+                READ lastName
+                TRY
+                    IF Validation.isValidName(lastName) THEN
+                        SET validLastName ← TRUE
+                    ENDIF
+                CATCH IllegalArgumentException
+                    DISPLAY error message
+                ENDTRY
+            WHILE validLastName = FALSE
+
+
+            // ===== Course Enrolled Validation =====
+            DECLARE validCourse : BOOLEAN ← FALSE
+            DO
+                PROMPT "Enter Course Enrolled:-"
+                READ course
+                TRY
+                    IF Validation.isValidName(course) THEN
+                        SET validCourse ← TRUE
+                    ENDIF
+                CATCH IllegalArgumentException
+                    DISPLAY error message
+                ENDTRY
+            WHILE validCourse = FALSE
+
+
+            // ===== Year Level Validation =====
+            DECLARE validYearLevel : BOOLEAN ← FALSE
+            DO
+                PROMPT "Enter Student's study year:-"
+                READ inputYear
+                TRY
+                    CONVERT inputYear TO INTEGER → yearLevel
+                    IF Validation.isValidYearLevel(yearLevel) THEN
+                        SET validYearLevel ← TRUE
+                    ENDIF
+                CATCH NumberFormatException
+                    DISPLAY "Please enter a valid integer for year level."
+                CATCH IllegalArgumentException
+                    DISPLAY error message
+                ENDTRY
+            WHILE validYearLevel = FALSE
+
+
+            // ===== CWA Validation =====
+            DECLARE validCWA : BOOLEAN ← FALSE
+            DO
+                PROMPT "Enter student's CWA:-"
+                READ inputCWA
+                TRY
+                    CONVERT inputCWA TO DOUBLE → CWA
+                    IF Validation.isValidCWA(CWA) THEN
+                        SET validCWA ← TRUE
+                    ENDIF
+                CATCH NumberFormatException
+                    DISPLAY "Please enter a valid number for CWA."
+                CATCH IllegalArgumentException
+                    DISPLAY error message
+                ENDTRY
+            WHILE validCWA = FALSE
+
+
+            // ===== Study Status Validation =====
+            DECLARE validStatus : BOOLEAN ← FALSE
+            DO
+                PROMPT "Enter study Status (FT/PT):-"
+                READ status
+                CONVERT status TO UPPERCASE
+                TRY
+                    IF Validation.isValidStatus(status) THEN
+                        SET validStatus ← TRUE
+                    ENDIF
+                CATCH IllegalArgumentException
+                    DISPLAY error message
+                ENDTRY
+            WHILE validStatus = FALSE
+
+
+            // ===== Credits Earned Validation =====
+            DECLARE validCredits : BOOLEAN ← FALSE
+            DO
+                PROMPT "Enter Credits earned by student:-"
+                READ inputCredits
+                TRY
+                    CONVERT inputCredits TO INTEGER → creditsEarned
+                    IF Validation.isValidCreditsEarned(creditsEarned) THEN
+                        SET validCredits ← TRUE
+                    ENDIF
+                CATCH NumberFormatException
+                    DISPLAY "Please enter a valid integer for credits earned."
+                CATCH IllegalArgumentException
+                    DISPLAY error message
+                ENDTRY
+            WHILE validCredits = FALSE
+
+
+            // ===== Object Creation & File Writing =====
+            CREATE details ← new Details(course, yearLevel, CWA, status, creditsEarned)
+            CREATE newStudent ← new Student(studentID, firstName, lastName, details)
+            CALL fileHandler.writingToCSVFile(stuData, newStudent.getStudentData())
+            DISPLAY "Student data has been validated"
+
+            SET isExit ← TRUE
 
         CATCH InputMismatchException
-            DISPLAY "Input mismatch - Try again"
-        CATCH IllegalArgumentException
-            DISPLAY "Error - " + error message + " Try again"
+            DISPLAY "Input mismatch:- Enter the correct input type"
+            DISPLAY "Try again"
+            SET isExit ← FALSE
 
-    WHILE TRUE
+        CATCH IllegalArgumentException
+            DISPLAY "Error - " + error message
+            DISPLAY "Try again"
+            SET isExit ← FALSE
+
+    WHILE isExit = FALSE
 END METHOD
+
 -----------------------------------------------------------
 
 
@@ -174,8 +308,10 @@ EXPORT: none
 ASSERTION: Displays all student names and IDs
 
     FOR EACH student IN stuData
-        DISPLAY "Student Name: " + student.firstName + " " + student.lastName + " ID: " + student.ID
+        DISPLAY " ID: " + student.ID + ": Student Name: " + student.firstName + " " + student.lastName
     ENDFOR
+
+    DISPLAY "Total Number of students:- " + stuData.length
 
 END METHOD
 -----------------------------------------------------------
@@ -284,11 +420,14 @@ CLASS Validation
 STATIC METHOD: isValidStudentID
 IMPORT: studentID (STRING)
 EXPORT: BOOLEAN
-
-    IF studentID matches "S\d{7}" THEN
-        RETURN TRUE
+    IF studentID IS NOT NULL THEN 
+        IF studentID matches "S\d{7}" THEN
+            RETURN TRUE
+        ELSE
+            THROW "Invalid ID format"
+        ENDIF
     ELSE
-        THROW "Invalid ID format"
+        THROW Student ID cannot bbe a null value
     ENDIF
 -----------------------------------------------------------
 

@@ -14,9 +14,8 @@ public class FileHandling {
         int rows = 0;
         String line;
 
-
-        // Count total rows
-        try (BufferedReader rowReader = new BufferedReader(new FileReader(this.File))) {
+        // count rows
+        try (BufferedReader rowReader = new BufferedReader(new InputStreamReader(new FileInputStream(this.File)))) {
             while (rowReader.readLine() != null) rows++;
         } catch (Exception e) {
             e.getStackTrace();
@@ -27,7 +26,7 @@ public class FileHandling {
         String[][] stuData = new String[rows - 1][]; // first row = header
         int counter = 0;
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(this.File))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.File)))) {
 
             while ((line = reader.readLine()) != null) {
                 String[] values = line.split(",");
